@@ -5,7 +5,7 @@
  * surrounding brand color). Replaces emoji used as iconography. No network
  * requests — every glyph ships in the bundle.
  */
-type IconName =
+export type IconName =
   | "storefront"
   | "bolt"
   | "heart"
