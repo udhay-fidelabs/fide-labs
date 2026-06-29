@@ -10,12 +10,25 @@ const CAROUSEL_TOTAL = 5;
 function FaqItem({ question, children }: { question: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="faq-item">
-      <div className={`faq-q${open ? " open" : ""}`} onClick={() => setOpen((o) => !o)}>
-        {question}
-        <span className="faq-chevron">▾</span>
-      </div>
-      <div className={`faq-a${open ? " open" : ""}`}>{children}</div>
+    <div
+      className={`faq2-item${open ? " open" : ""}`}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className="faq2-q"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+      >
+        <span className="faq2-qtext">{question}</span>
+        <span className="faq2-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+        </span>
+      </button>
+      <div className="faq2-a"><div className="faq2-a-inner">{children}</div></div>
     </div>
   );
 }
@@ -314,53 +327,44 @@ export default function HomePage({ showPage, showToast }: PageProps) {
         </div>
       </div>
 
-      {/* WHY FIDE LABS */}
+      {/* WHY CHOOSE US */}
       <section>
-        <div className="text-center reveal">
-          <div className="section-label">Why Choose Us</div>
-          <div className="section-title">Built for Shopify.<br />Designed for Merchants.</div>
-          <div className="section-sub center">Four pillars that make FIDE Labs different from every other Shopify app company.</div>
-        </div>
-        <div className="feature-grid reveal">
-          <div className="feature-card">
-            <div className="fc-icon blue"><Icon name="storefront" /></div>
-            <div className="fc-title">Shopify Native</div>
-            <div className="fc-desc">Built exclusively for Shopify on the official Admin and Storefront APIs. No scripts, no theme hacks, no fragile workarounds, so it behaves like part of Shopify because it is, and it updates with the platform instead of breaking against it.</div>
-            <ul className="fc-list">
-              <li>Official Admin &amp; Storefront APIs</li>
-              <li>Theme App Extensions, zero code edits</li>
-              <li>Passes Shopify’s app review</li>
-            </ul>
+        <div className="wcu-panel reveal">
+          <div className="wcu-intro">
+            <span className="wcu-eyebrow">Features</span>
+            <h2 className="wcu-title">Why Merchants <span className="wcu-accent">Choose Us?</span></h2>
+            <p className="wcu-desc">FIDE Labs builds Shopify apps that turn quote requests into revenue. Four reasons wholesale merchants pick us over every other B2B app on the store.</p>
+            <button className="btn-primary" onClick={() => showPage("product")}>Explore Products <Icon name="arrow-right" size={18} /></button>
           </div>
-          <div className="feature-card">
-            <div className="fc-icon teal"><Icon name="bolt" /></div>
-            <div className="fc-title">Fast Setup</div>
-            <div className="fc-desc">Go live the same afternoon you install. One click adds the app to your theme, smart defaults handle the config, and a guided walkthrough gets your first quote flow live in minutes, not days of developer time.</div>
-            <ul className="fc-list">
-              <li>One-click theme install</li>
-              <li>Smart defaults out of the box</li>
-              <li>Guided onboarding under 10 minutes</li>
-            </ul>
-          </div>
-          <div className="feature-card">
-            <div className="fc-icon blue"><Icon name="heart" /></div>
-            <div className="fc-title">Merchant First</div>
-            <div className="fc-desc">Every feature starts from real merchant problems, not a roadmap meeting. We ship what wholesale sellers actually ask for, cut the bloat nobody uses, and keep the interface simple enough that your team needs no training.</div>
-            <ul className="fc-list">
-              <li>Shaped by merchant feedback</li>
-              <li>No bloat, no clutter</li>
-              <li>A public roadmap you can vote on</li>
-            </ul>
-          </div>
-          <div className="feature-card">
-            <div className="fc-icon teal"><Icon name="building" /></div>
-            <div className="fc-title">Enterprise Ready</div>
-            <div className="fc-desc">Start as a solo store and scale to a Shopify Plus operation without switching tools. Handle high quote volume, multiple team members, and complex B2B pricing while keeping the same fast, simple experience you started with.</div>
-            <ul className="fc-list">
-              <li>Scales to Shopify Plus</li>
-              <li>Role-based team access</li>
-              <li>Priority support &amp; SLAs</li>
-            </ul>
+          <div className="wcu-features">
+            <div className="wcu-item">
+              <div className="wcu-ic"><Icon name="storefront" size={22} /></div>
+              <div>
+                <h3 className="wcu-h">Shopify Native</h3>
+                <p className="wcu-p">Built on official Shopify APIs, so it never breaks against the platform.</p>
+              </div>
+            </div>
+            <div className="wcu-item">
+              <div className="wcu-ic"><Icon name="bolt" size={22} /></div>
+              <div>
+                <h3 className="wcu-h">Fast Setup</h3>
+                <p className="wcu-p">One-click theme install and smart defaults get you live the same afternoon.</p>
+              </div>
+            </div>
+            <div className="wcu-item">
+              <div className="wcu-ic"><Icon name="heart" size={22} /></div>
+              <div>
+                <h3 className="wcu-h">Merchant First</h3>
+                <p className="wcu-p">Every feature is shaped by real merchant feedback, with none of the bloat.</p>
+              </div>
+            </div>
+            <div className="wcu-item">
+              <div className="wcu-ic"><Icon name="building" size={22} /></div>
+              <div>
+                <h3 className="wcu-h">Enterprise Ready</h3>
+                <p className="wcu-p">Scale from a solo store to Shopify Plus without ever switching tools.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -369,37 +373,68 @@ export default function HomePage({ showPage, showToast }: PageProps) {
       <WorkflowTimeline />
 
       {/* TESTIMONIALS */}
-      <section>
+      <section className="t-section">
         <div className="text-center reveal">
-          <div className="section-label">Testimonials</div>
-          <div className="section-title">Merchants Love FIDE</div>
+          <div className="t-eyebrow"><span className="t-eyebrow-icon"><Icon name="heart" size={12} /></span>Testimonials</div>
+          <div className="section-title">Our Merchants&apos; Feedback</div>
+          <div className="section-sub center">See how Shopify stores grow B2B sales with FIDE</div>
         </div>
-        <div className="testimonial-grid reveal">
-          <div className="testimonial-card"><div className="stars">★★★★★</div><div className="testimonial-text">&quot;FIDE transformed how we handle B2B quotes. What used to take days now happens in hours. Our wholesale revenue is up 40% since installing.&quot;</div><div className="testimonial-author"><div className="author-avatar" style={{ background: "var(--blue)" }}>SR</div><div><div className="author-name">Sarah R.</div><div className="author-role">Owner, Industrial Supply Co.</div></div></div></div>
-          <div className="testimonial-card"><div className="stars">★★★★★</div><div className="testimonial-text">&quot;The hide price feature was exactly what we needed for our wholesale catalog. Setup took 10 minutes and it&apos;s been flawless ever since.&quot;</div><div className="testimonial-author"><div className="author-avatar" style={{ background: "var(--teal-dark)" }}>MK</div><div><div className="author-name">Marcus K.</div><div className="author-role">CEO, TechWorld B2B</div></div></div></div>
-          <div className="testimonial-card"><div className="stars">★★★★★</div><div className="testimonial-text">&quot;Best Shopify app investment we&apos;ve made. The quote dashboard gives us full visibility and the email automation saves us hours every week.&quot;</div><div className="testimonial-author"><div className="author-avatar" style={{ background: "#7c3aed" }}>JL</div><div><div className="author-name">Jennifer L.</div><div className="author-role">B2B Manager, Metro Supplies</div></div></div></div>
+        <div className="t-grid reveal">
+          {[
+            { initials: "SR", bg: "linear-gradient(135deg,#2F54EB,#1a3cc7)", name: "Sarah R.", role: "Industrial Supply Co.", quote: "FIDE gets our wholesale quotes out the same day, not next week.", result: "Wholesale revenue +40%" },
+            { initials: "MK", bg: "linear-gradient(135deg,#14B8A6,#0d9488)", name: "Marcus K.", role: "TechWorld B2B", quote: "Hide Price and Quote replaced our whole manual pricing flow.", result: "Live in under 10 minutes" },
+            { initials: "JL", bg: "linear-gradient(135deg,#2F54EB,#14B8A6)", name: "Jennifer L.", role: "Metro Supplies", quote: "The dashboard finally gives us full visibility on every quote.", result: "Hours saved every week" },
+            { initials: "DO", bg: "linear-gradient(135deg,#1a3cc7,#2F54EB)", name: "David O.", role: "Nova Industrial", quote: "Email automation chases quotes so my team doesn't have to.", result: "Quote response 3× faster" },
+            { initials: "PN", bg: "linear-gradient(135deg,#0d9488,#14B8A6)", name: "Priya N.", role: "GlobalTrade Inc.", quote: "Our B2B buyers self-serve every order through the portal now.", result: "B2B orders +62%" },
+            { initials: "TR", bg: "linear-gradient(135deg,#14B8A6,#2F54EB)", name: "Tomás R.", role: "Harbor Wholesale", quote: "We scaled from a solo store to Shopify Plus on the same setup.", result: "Scaled to Shopify Plus" },
+          ].map((t) => (
+            <div className="t-card" key={t.initials}>
+              <div className="t-head">
+                <div className="t-avatar" style={{ background: t.bg }}>{t.initials}</div>
+                <div><div className="t-name">{t.name}</div><div className="t-role">{t.role}</div></div>
+              </div>
+              <div className="t-stars" aria-label="5 out of 5 stars">★★★★★</div>
+              <blockquote className="t-quote">&ldquo;{t.quote}&rdquo;</blockquote>
+              <div className="t-result">{t.result}</div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ background: "var(--gray-50)", borderRadius: "24px", margin: "0 5%" }}>
-        <div className="text-center reveal">
-          <div className="section-label">FAQ</div>
-          <div className="section-title">Common Questions</div>
-        </div>
-        <div className="faq-list reveal">
-          <FaqItem question="What Shopify plans does FIDE work with?">
-            <p>FIDE works with all Shopify plans including Basic, Shopify, Advanced, and Shopify Plus. Some enterprise features require Shopify Plus.</p>
-          </FaqItem>
-          <FaqItem question="Is there a free plan?">
-            <p>Yes! Our Starter plan is completely free with up to 50 quote requests per month. No credit card required to get started.</p>
-          </FaqItem>
-          <FaqItem question="Can I customize the quote request form?">
-            <p>Absolutely. Our Form Builder lets you add custom fields, set required fields, and match the form design to your store&apos;s branding.</p>
-          </FaqItem>
-          <FaqItem question="Does it work with my theme?">
-            <p>FIDE is compatible with all Shopify 2.0 themes and most legacy themes. Our theme detection engine adapts automatically.</p>
-          </FaqItem>
+      <section>
+        <div className="faq2-wrap reveal">
+          <div className="faq2-intro">
+            <span className="faq2-eyebrow"><span className="faq2-eyebrow-ic"><Icon name="book" size={12} /></span>Frequently asked questions</span>
+            <h2 className="faq2-title">Frequently asked<br /><span className="faq2-accent">questions</span></h2>
+            <p className="faq2-desc">Everything you need to know about FIDE — plans, setup, security, and theme support. Can&apos;t find your answer? Our team replies within a day.</p>
+          </div>
+          <div className="faq2-list">
+            <FaqItem question="What Shopify plans does FIDE work with?">
+              <p>FIDE works with all Shopify plans including Basic, Shopify, Advanced, and Shopify Plus. Some enterprise features require Shopify Plus.</p>
+            </FaqItem>
+            <FaqItem question="Is there a free plan?">
+              <p>Yes! Our Starter plan is completely free with up to 50 quote requests per month. No credit card required to get started.</p>
+            </FaqItem>
+            <FaqItem question="How long does setup take?">
+              <p>Most merchants are live the same afternoon. One click adds FIDE to your theme, smart defaults handle the config, and the guided walkthrough takes under 10 minutes.</p>
+            </FaqItem>
+            <FaqItem question="Do my customers need an account to request a quote?">
+              <p>No. Shoppers request a quote straight from the product page, and they accept your offer through a secure link — no login or signup required.</p>
+            </FaqItem>
+            <FaqItem question="Can I set different prices for different customers?">
+              <p>Yes. Set custom pricing, volume discounts, and terms per quote, or save reusable templates for your regular wholesale buyers.</p>
+            </FaqItem>
+            <FaqItem question="Can I customize the quote request form?">
+              <p>Absolutely. Our Form Builder lets you add custom fields, set required fields, and match the form design to your store&apos;s branding.</p>
+            </FaqItem>
+            <FaqItem question="Does it work with my theme?">
+              <p>FIDE is compatible with all Shopify 2.0 themes and most legacy themes. Our theme detection engine adapts automatically.</p>
+            </FaqItem>
+            <FaqItem question="What support do you offer?">
+              <p>Every plan includes email support with a same-day reply on weekdays. Advanced and Plus merchants get priority support and onboarding help.</p>
+            </FaqItem>
+          </div>
         </div>
       </section>
 

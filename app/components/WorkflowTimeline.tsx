@@ -2,44 +2,50 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Step = { n: string; t: string; d: string; meta: string };
+type Step = { n: string; t: string; d: string; meta: string; points: string[] };
 
 const STEPS: Step[] = [
   {
     n: "01",
     t: "Customer requests quote",
-    d: "A shopper taps “Request a quote” instead of Buy, right on your product page — no account or back-and-forth email needed.",
+    d: "A shopper taps “Request a quote” instead of Buy, right on the product page. No account, no signup, no back-and-forth email just to get a price.",
     meta: "On your storefront",
+    points: ["Works on any product or variant", "Captures cart, quantity & contact in one step"],
   },
   {
     n: "02",
     t: "Merchant reviews request",
-    d: "It lands in your dashboard the moment it’s sent, with the full cart, quantities, and customer details attached.",
+    d: "The request lands in your dashboard the moment it’s sent, with the full cart, quantities, and customer details already attached and organized for you.",
     meta: "FIDE dashboard",
+    points: ["Real-time desktop & email alerts", "Full customer and cart context"],
   },
   {
     n: "03",
     t: "Merchant sends quote",
-    d: "Set custom pricing, volume discounts, and terms, then send a branded offer back in a single click.",
+    d: "Set custom pricing, volume discounts, and terms, then send a branded offer back in a single click — or save it as a template to reuse next time.",
     meta: "Custom pricing",
+    points: ["Per-line or order-wide discounts", "Reusable quote templates"],
   },
   {
     n: "04",
     t: "Customer reviews quote",
-    d: "They get a branded email with your price, terms, and a secure link to accept — no login required.",
+    d: "They get a branded email with your price, terms, and a secure link to accept. No login, no portal to hunt through — just one clear call to action.",
     meta: "Branded email",
+    points: ["Mobile-friendly branded email", "Secure, expiring accept link"],
   },
   {
     n: "05",
     t: "Customer approves",
-    d: "One click accepts the quote and drops the agreed pricing straight into a ready-to-pay checkout.",
+    d: "One click accepts the quote and drops the agreed pricing straight into a ready-to-pay Shopify checkout, with the negotiated discount already applied.",
     meta: "Secure checkout",
+    points: ["Agreed price locked in", "Pay by card or on net terms"],
   },
   {
     n: "06",
     t: "Order confirmed",
-    d: "The paid order flows straight into Shopify with the quoted pricing intact — no manual entry, no re-keying.",
+    d: "The paid order flows straight into Shopify with the quoted pricing intact — no manual entry, no re-keying, no reconciliation to clean up later.",
     meta: "Synced to Shopify",
+    points: ["Native Shopify order", "Full quote-to-order audit trail"],
   },
 ];
 
@@ -110,7 +116,7 @@ export default function WorkflowTimeline() {
             {/* spine track + animated fill */}
             <span aria-hidden="true" className="pointer-events-none absolute left-[21px] top-9 bottom-9 w-1 rounded bg-brand-blue/15">
               <span
-                className="absolute left-0 top-0 w-full rounded bg-gradient-to-b from-brand-blue to-brand-teal transition-[height] duration-300 ease-out"
+                className="absolute left-0 top-0 w-full rounded bg-gradient-to-b from-brand-blue to-brand-teal"
                 style={{ height: `${fill * 100}%` }}
               />
             </span>
@@ -123,24 +129,34 @@ export default function WorkflowTimeline() {
                   <span
                     data-node
                     aria-hidden="true"
-                    className={`z-10 mt-9 grid h-10 w-10 place-items-center rounded-full ring-4 transition-all duration-500 ${
+                    className={`z-10 mt-9 grid h-10 w-10 place-items-center rounded-full ring-4 transition-colors duration-300 ease-out ${
                       on
-                        ? "scale-100 bg-gradient-to-br from-brand-blue to-brand-teal text-white shadow-[0_6px_16px_rgba(47,84,235,0.4)] ring-[#e9f1fd]"
-                        : "scale-90 bg-white text-slate-300 ring-[#dbe7f5]"
+                        ? "bg-gradient-to-br from-brand-blue to-brand-teal text-white shadow-[0_4px_12px_rgba(47,84,235,0.28)] ring-[#e9f1fd]"
+                        : "bg-white text-slate-300 ring-[#dbe7f5]"
                     }`}
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
                   </span>
 
                   {/* gradient-border white card */}
-                  <div className="rounded-[22px] bg-gradient-to-br from-brand-blue to-brand-teal p-[2px] shadow-[0_18px_45px_rgba(47,84,235,0.12)] transition-transform duration-300 hover:-translate-y-1">
+                  <div className="rounded-[21px] bg-gradient-to-br from-brand-blue to-brand-teal p-px shadow-[0_18px_45px_rgba(47,84,235,0.12)] transition-transform duration-300 hover:-translate-y-1">
                     <div className="rounded-[20px] bg-white p-8 sm:p-9">
-                      <div className="flex items-baseline justify-between gap-4">
+                      <div className="flex items-center justify-between gap-4">
                         <span className="bg-gradient-to-br from-brand-blue to-brand-teal bg-clip-text font-[family-name:var(--font-mono)] text-[46px] font-semibold leading-none text-transparent">{s.n}</span>
                         <span className="font-[family-name:var(--font-mono)] text-[11px] font-medium uppercase tracking-[0.1em] text-gray-400">{s.meta}</span>
                       </div>
                       <h3 className="mt-7 font-[family-name:var(--font-display)] text-[22px] font-bold leading-snug tracking-tight text-gray-900">{s.t}</h3>
                       <p className="mt-3 font-[family-name:var(--font-sans)] text-[15px] leading-relaxed text-gray-500">{s.d}</p>
+                      <ul className="mt-5 flex flex-col gap-2.5 border-t border-gray-100 pt-5">
+                        {s.points.map((p) => (
+                          <li key={p} className="flex items-start gap-2.5 font-[family-name:var(--font-sans)] text-[13.5px] leading-snug text-gray-600">
+                            <span aria-hidden="true" className="mt-0.5 grid h-[18px] w-[18px] flex-shrink-0 place-items-center rounded-md bg-[#e0faf8] text-[#0d9488]">
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                            </span>
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </li>
