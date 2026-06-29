@@ -1,65 +1,132 @@
-import Image from "next/image";
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import HomePage from "./components/pages/HomePage";
+import ProductPage from "./components/pages/ProductPage";
+import AboutPage from "./components/pages/AboutPage";
+import PricingPage from "./components/pages/PricingPage";
+import ContactPage from "./components/pages/ContactPage";
+import SupportPage from "./components/pages/SupportPage";
+import DocsPage from "./components/pages/DocsPage";
+import PrivacyPage from "./components/pages/PrivacyPage";
+import TermsPage from "./components/pages/TermsPage";
 
 export default function Home() {
+  const [activePage, setActivePage] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
+  const [backVisible, setBackVisible] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [toast, setToast] = useState({ msg: "", show: false });
+
+  const showToast = useCallback((msg: string) => {
+    setToast({ msg, show: true });
+    setTimeout(() => setToast((t) => ({ ...t, show: false })), 3000);
+  }, []);
+
+  const showPage = useCallback((name: string) => {
+    setActivePage(name);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Nav scroll styling + back-to-top visibility
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      setBackVisible(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Reveal-on-scroll animations, re-run whenever the active page changes.
+  // The IntersectionObserver drives the entrance animation; a backstop timer
+  // guarantees content is never left permanently invisible (slow/failed JS,
+  // crawlers, landing mid-page).
+  useEffect(() => {
+    const revealAll = () =>
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => el.classList.add("visible"));
+
+    const timer = setTimeout(() => {
+      const els = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        revealAll();
+        return;
+      }
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      els.forEach((el) => {
+        if (!el.classList.contains("visible")) obs.observe(el);
+      });
+    }, 100);
+
+    const backstop = setTimeout(revealAll, 2500);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(backstop);
+    };
+  }, [activePage]);
+
+  const pages: Record<string, React.ReactNode> = {
+    home: <HomePage showPage={showPage} showToast={showToast} />,
+    product: <ProductPage showPage={showPage} showToast={showToast} />,
+    about: <AboutPage showPage={showPage} showToast={showToast} />,
+    pricing: <PricingPage showPage={showPage} showToast={showToast} />,
+    contact: <ContactPage showPage={showPage} showToast={showToast} />,
+    support: <SupportPage showPage={showPage} showToast={showToast} />,
+    docs: <DocsPage showPage={showPage} showToast={showToast} />,
+    privacy: <PrivacyPage showPage={showPage} showToast={showToast} />,
+    terms: <TermsPage showPage={showPage} showToast={showToast} />,
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      {/* TOAST */}
+      <div className={`toast${toast.show ? " show" : ""}`} id="toast">
+        <div className="toast-icon">✓</div>
+        <span id="toast-msg">{toast.msg}</span>
+      </div>
+
+      {/* BACK BTN */}
+      <button
+        className={`back-btn${backVisible ? " show" : ""}`}
+        id="backBtn"
+        onClick={scrollToTop}
+        title="Back to top"
+      >
+        ↑
+      </button>
+
+      <Navbar
+        activePage={activePage}
+        scrolled={scrolled}
+        menuOpen={menuOpen}
+        showPage={showPage}
+        showToast={showToast}
+        toggleMenu={toggleMenu}
+      />
+
+      {pages[activePage] ?? pages.home}
+
+      <Footer showPage={showPage} showToast={showToast} />
+    </>
   );
 }
