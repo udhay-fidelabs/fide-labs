@@ -574,9 +574,9 @@ textarea.form-input{min-height:140px;resize:vertical}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
-  .ps-grid,.story-grid,.contact-grid,.legal-layout,.docs-layout,.footer-grid{grid-template-columns:1fr}  .dash-body{grid-template-columns:1fr}
-  .dash-sidebar{display:none}
-  .dash-stats{grid-template-columns:repeat(2,1fr)}
+  .ps-grid,.story-grid,.contact-grid,.legal-layout,.docs-layout,.footer-grid{grid-template-columns:1fr}
+  /* Dashboard carousel scales to fit on mobile (see HeroSection fit logic),
+     so it keeps its full desktop layout rather than collapsing piecemeal. */
   .nav-links{display:none}
   .hamburger{display:flex}
   .metric-row{grid-template-columns:repeat(2,1fr)}
