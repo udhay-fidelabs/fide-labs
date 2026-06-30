@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Icon from "../Icon";
 import LogoMark from "../LogoMark";
+import ProductGallery from "../ProductGallery";
 import { FaqBlock } from "../Faq";
 import { GENERAL_FAQ } from "../../lib/faq";
 import { type Product, relatedProducts } from "../../lib/products";
@@ -43,6 +44,16 @@ export default function ProductDetail({ product }: { product: Product }) {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOTS */}
+      <section className="mx-auto max-w-[1180px] px-6 pt-[80px]">
+        <div className="reveal mb-10 text-center">
+          <div className="section-label">Screenshots</div>
+          <h2 className="section-title">See it in action</h2>
+          <p className="section-sub center">A look at the quote workflow, from the storefront button to the dashboard.</p>
+        </div>
+        <ProductGallery screenshots={product.screenshots} productName={product.name} />
       </section>
 
       {/* OVERVIEW + ILLUSTRATIVE PREVIEW */}

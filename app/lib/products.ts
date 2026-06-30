@@ -25,6 +25,26 @@ export type DocSection = {
   md: string;
 };
 
+/**
+ * A single entry in the product screenshot carousel.
+ *
+ * `src` is intentionally optional: when it's empty the gallery renders a
+ * styled placeholder (icon + label) so the section looks complete before real
+ * screenshots exist. To use a real image, drop the file into
+ * `public/products/<slug>/` and set `src` to its path (e.g.
+ * "/products/fide-quote-request/dashboard.png") — no other code changes needed.
+ */
+export type Screenshot = {
+  /** Short label shown in the frame title bar and thumbnail. */
+  label: string;
+  /** One-line caption shown under the active slide. */
+  caption: string;
+  /** Icon used for the placeholder until a real image is added. */
+  icon: IconName;
+  /** Path to a real screenshot in /public. Leave undefined to show a placeholder. */
+  src?: string;
+};
+
 export type Product = {
   slug: string;
   name: string;
@@ -34,6 +54,8 @@ export type Product = {
   status: "available" | "coming-soon";
   category: string;
   heroPoints: string[];
+  /** Product screenshots shown in the detail-page carousel. */
+  screenshots: Screenshot[];
   features: { icon: IconName; title: string; desc: string; points: string[] }[];
   benefits: { icon: IconName; title: string; desc: string }[];
   audience: string[];
@@ -52,6 +74,15 @@ const fideQuoteRequest: Product = {
   status: "available",
   category: "B2B & Wholesale",
   heroPoints: ["No code", "No developer", "Live in under 10 minutes"],
+  // Placeholders for now — drop real screenshots into
+  // public/products/fide-quote-request/ and set each `src` to swap them in.
+  screenshots: [
+    { label: "Quote dashboard", icon: "grid", caption: "Every incoming request in one place — review, filter, track status, and respond with custom pricing." },
+    { label: "Request a Quote button", icon: "tag", caption: "A customizable Request a Quote button on any product or collection — no code required." },
+    { label: "Hide Price", icon: "eye-off", caption: "Hide prices and the Add to Cart button from guests to drive quote requests." },
+    { label: "Quote Cart", icon: "cart", caption: "Customers collect multiple products and submit one consolidated quote request." },
+    { label: "Email notifications", icon: "mail", caption: "Branded, automatic emails across the full quote lifecycle — sent from your own address." },
+  ],
   features: [
     {
       icon: "tag",
