@@ -1,6 +1,6 @@
 "use client";
 
-import type { PageProps } from "../types";
+import { useNav } from "../useNav";
 import HeroSection from "../home/HeroSection";
 import ProductShowcase from "../home/ProductShowcase";
 import WhyChooseUs from "../home/WhyChooseUs";
@@ -9,7 +9,8 @@ import Testimonials from "../home/Testimonials";
 import FaqSection from "../home/FaqSection";
 import CtaBanner from "../home/CtaBanner";
 
-export default function HomePage({ showPage, showToast }: PageProps) {
+export default function HomePage() {
+  const { showPage, showToast } = useNav();
   return (
     <div className="page active" id="page-home">
       <HeroSection showPage={showPage} showToast={showToast} />

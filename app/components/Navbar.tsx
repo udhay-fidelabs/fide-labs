@@ -1,52 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LogoMark from "./LogoMark";
-
-interface NavbarProps {
-  activePage: string;
-  scrolled: boolean;
-  menuOpen: boolean;
-  showPage: (name: string) => void;
-  showToast: (msg: string) => void;
-  toggleMenu: () => void;
-}
-
-type SubItem = { label: string; desc: string; page: string };
-type NavItem = { label: string; page?: string; items?: SubItem[] };
-
-const NAV: NavItem[] = [
-  {
-    label: "Products",
-    items: [
-      { label: "Quote Requests", desc: "Let shoppers request a quote in one tap", page: "product" },
-      { label: "Hide Pricing", desc: "Gate prices behind login or approval", page: "product" },
-      { label: "Quote Dashboard", desc: "Track and manage every request", page: "product" },
-      { label: "Email Automation", desc: "Send branded quotes automatically", page: "product" },
-    ],
-  },
-  { label: "Pricing", page: "pricing" },
-  {
-    label: "Company",
-    items: [
-      { label: "About us", desc: "Our mission and the team behind FIDE", page: "about" },
-      { label: "Contact", desc: "Talk to our team", page: "contact" },
-    ],
-  },
-  {
-    label: "Resources",
-    items: [
-      { label: "Documentation", desc: "Setup guides and API reference", page: "docs" },
-      { label: "Help & Support", desc: "Get answers fast", page: "support" },
-    ],
-  },
-];
+import { PRODUCTS } from "../lib/products";
 
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg
       width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+      strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
       className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
     >
       <path d="m6 9 6 6 6-6" />
@@ -54,161 +18,175 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-export default function Navbar({
-  activePage,
-  scrolled,
-  menuOpen,
-  showPage,
-  toggleMenu,
-}: NavbarProps) {
-  const [open, setOpen] = useState<string | null>(null);
+const COMPANY = [
+  { label: "About us", desc: "Our mission and the team behind FIDE", href: "/about" },
+  { label: "Contact", desc: "Talk to our team", href: "/contact" },
+  { label: "Help & Support", desc: "Guides and answers, fast", href: "/support" },
+];
 
-  const isActive = (item: NavItem) =>
-    item.page === activePage || item.items?.some((s) => s.page === activePage);
+export default function Navbar() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setOpen(null);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(null);
+        setMenuOpen(false);
+      }
+    };
+    const onClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpen(null);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, []);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const productActive = pathname.startsWith("/products") || pathname === "/product";
+  const companyActive = COMPANY.some((c) => isActive(c.href));
+  const linkCls = (active: boolean) => `nv-link${active ? " nv-link-active" : ""}`;
 
   const span0 = menuOpen ? "rotate(45deg) translate(5px,5px)" : "";
   const span2 = menuOpen ? "rotate(-45deg) translate(5px,-5px)" : "";
 
   return (
-    <>
-      {/* NAVIGATION — flat white bar */}
-      <header
-        className={`fixed inset-x-0 top-0 z-[1000] border-b border-gray-200 bg-white/95 backdrop-blur transition-shadow duration-300 ${
-          scrolled ? "shadow-[0_6px_24px_rgba(16,24,40,0.06)]" : ""
-        }`}
-      >
-        <div className="mx-auto flex h-[68px] max-w-[1240px] items-center px-5 sm:px-8">
-          {/* logo */}
-          <button className="flex flex-shrink-0 items-center gap-2.5" onClick={() => showPage("home")}>
-            <LogoMark size={32} />
-            <span className="font-[family-name:var(--font-display)] text-[20px] font-extrabold tracking-tight text-gray-900">
-              FIDE<span className="text-brand-blue">Labs</span>
-            </span>
-          </button>
+    <header ref={navRef} className={`nv-header${scrolled ? " nv-scrolled" : ""}`}>
+      <div className="nv-bar">
+        {/* Logo */}
+        <Link href="/" className="nv-logo" aria-label="FIDE Labs home">
+          <LogoMark size={32} />
+          <span className="nv-wordmark">FIDE<span>Labs</span></span>
+        </Link>
 
-          {/* center nav */}
-          <div role="navigation" aria-label="Primary" className="ml-10 hidden flex-1 items-center gap-1 lg:flex">
-            {NAV.map((item) =>
-              item.items ? (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setOpen(item.label)}
-                  onMouseLeave={() => setOpen(null)}
-                >
-                  <button
-                    className={`flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
-                      isActive(item) || open === item.label
-                        ? "text-gray-900"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    {item.label}
-                    <Chevron open={open === item.label} />
-                  </button>
-
-                  {open === item.label && (
-                    <div className="absolute left-0 top-full z-50 pt-2.5">
-                      <div className="w-[320px] rounded-2xl border border-gray-100 bg-white p-2 shadow-[0_24px_60px_rgba(16,24,40,0.14)]">
-                        {item.items.map((sub) => (
-                          <button
-                            key={sub.label}
-                            onClick={() => {
-                              showPage(sub.page);
-                              setOpen(null);
-                            }}
-                            className="flex w-full flex-col gap-0.5 rounded-xl px-4 py-2.5 text-left transition-colors hover:bg-gray-50"
-                          >
-                            <span className="text-[14px] font-semibold text-gray-900">{sub.label}</span>
-                            <span className="text-[12.5px] leading-snug text-gray-500">{sub.desc}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+        {/* Centered desktop nav */}
+        <nav aria-label="Primary" className="nv-links">
+          <div
+            className="nv-item"
+            onMouseEnter={() => setOpen("Products")}
+            onMouseLeave={() => setOpen(null)}
+          >
+            <button
+              type="button"
+              aria-expanded={open === "Products"}
+              aria-haspopup="true"
+              className={`${linkCls(productActive)} nv-trigger`}
+              onClick={() => setOpen((o) => (o === "Products" ? null : "Products"))}
+            >
+              Products <Chevron open={open === "Products"} />
+            </button>
+            {open === "Products" && (
+              <div className="nv-pop nv-pop-wide">
+                <div className="nv-pop-inner">
+                  {PRODUCTS.map((p) => (
+                    <Link key={p.slug} href={`/products/${p.slug}`} className="nv-pop-row" onClick={() => setOpen(null)}>
+                      <span className="nv-pop-ic"><LogoMark size={28} /></span>
+                      <span className="nv-pop-text">
+                        <span className="nv-pop-title">{p.name}</span>
+                        <span className="nv-pop-desc">{p.tagline}</span>
+                      </span>
+                    </Link>
+                  ))}
+                  <Link href="/products" className="nv-pop-all" onClick={() => setOpen(null)}>
+                    View all products →
+                  </Link>
                 </div>
-              ) : (
-                <button
-                  key={item.label}
-                  onClick={() => showPage(item.page!)}
-                  className={`rounded-lg px-3.5 py-2 text-[15px] font-medium transition-colors ${
-                    isActive(item) ? "text-gray-900" : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              )
+              </div>
             )}
           </div>
 
-          {/* right actions */}
-          <div className="ml-auto flex items-center gap-2.5 lg:ml-0">
-            <button
-              onClick={() => showPage("contact")}
-              className="rounded-full bg-brand-blue px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_4px_14px_rgba(47,84,235,0.3)] transition-all hover:-translate-y-px hover:bg-[#2748d8]"
-            >
-              Contact
-            </button>
-            <button
-              className="ml-1 flex flex-col gap-[5px] p-2 lg:hidden"
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-            >
-              <span className="h-0.5 w-5 rounded bg-gray-700 transition-all" style={{ transform: span0 }} />
-              <span className="h-0.5 w-5 rounded bg-gray-700 transition-all" style={{ opacity: menuOpen ? 0 : 1 }} />
-              <span className="h-0.5 w-5 rounded bg-gray-700 transition-all" style={{ transform: span2 }} />
-            </button>
-          </div>
-        </div>
-      </header>
+          <Link href="/docs" aria-current={isActive("/docs") ? "page" : undefined} className={linkCls(isActive("/docs"))}>Docs</Link>
 
-      {/* MOBILE MENU */}
-      {menuOpen && (
-        <div className="fixed inset-x-0 top-[68px] z-[999] max-h-[calc(100vh-68px)] overflow-y-auto border-b border-gray-200 bg-white px-5 py-4 lg:hidden">
-          {NAV.map((item) => (
-            <div key={item.label} className="border-b border-gray-100 py-2 last:border-0">
-              {item.page ? (
-                <button
-                  onClick={() => {
-                    showPage(item.page!);
-                    toggleMenu();
-                  }}
-                  className="w-full py-2 text-left text-[15px] font-semibold text-gray-900"
-                >
-                  {item.label}
-                </button>
-              ) : (
-                <>
-                  <div className="py-1 font-[family-name:var(--font-mono)] text-[11px] font-bold uppercase tracking-[0.1em] text-gray-400">
-                    {item.label}
-                  </div>
-                  {item.items!.map((sub) => (
-                    <button
-                      key={sub.label}
-                      onClick={() => {
-                        showPage(sub.page);
-                        toggleMenu();
-                      }}
-                      className="w-full py-2 text-left text-[15px] font-medium text-gray-700"
-                    >
-                      {sub.label}
-                    </button>
-                  ))}
-                </>
-              )}
-            </div>
-          ))}
-          <button
-            onClick={() => {
-              showPage("contact");
-              toggleMenu();
-            }}
-            className="mt-4 w-full rounded-full bg-brand-blue px-4 py-2.5 text-[14px] font-semibold text-white"
+          <div
+            className="nv-item"
+            onMouseEnter={() => setOpen("Company")}
+            onMouseLeave={() => setOpen(null)}
           >
-            Contact
+            <button
+              type="button"
+              aria-expanded={open === "Company"}
+              aria-haspopup="true"
+              className={`${linkCls(companyActive)} nv-trigger`}
+              onClick={() => setOpen((o) => (o === "Company" ? null : "Company"))}
+            >
+              Company <Chevron open={open === "Company"} />
+            </button>
+            {open === "Company" && (
+              <div className="nv-pop">
+                <div className="nv-pop-inner">
+                  {COMPANY.map((c) => (
+                    <Link key={c.href} href={c.href} className="nv-pop-row" onClick={() => setOpen(null)}>
+                      <span className="nv-pop-text">
+                        <span className="nv-pop-title">{c.label}</span>
+                        <span className="nv-pop-desc">{c.desc}</span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </nav>
+
+        {/* Right actions */}
+        <div className="nv-right">
+          <Link href="/contact" className="nv-cta">Try Now</Link>
+          <button
+            type="button"
+            className="nv-burger"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
+            <span style={{ transform: span0 }} />
+            <span style={{ opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ transform: span2 }} />
           </button>
         </div>
+      </div>
+
+      {/* Mobile menu — floating pill */}
+      {menuOpen && (
+        <div className="nv-mobile">
+          <div className="nv-mobile-group">
+            <div className="nv-mobile-label">Products</div>
+            {PRODUCTS.map((p) => (
+              <Link key={p.slug} href={`/products/${p.slug}`} className="nv-mobile-link">{p.name}</Link>
+            ))}
+            <Link href="/products" className="nv-mobile-link">All products</Link>
+          </div>
+          <div className="nv-mobile-group">
+            <Link href="/docs" className="nv-mobile-link nv-mobile-top">Docs</Link>
+          </div>
+          <div className="nv-mobile-group">
+            <div className="nv-mobile-label">Company</div>
+            {COMPANY.map((c) => (
+              <Link key={c.href} href={c.href} className="nv-mobile-link">{c.label}</Link>
+            ))}
+          </div>
+          <Link href="/contact" className="nv-cta nv-cta-block">Try Now</Link>
+        </div>
       )}
-    </>
+    </header>
   );
 }

@@ -1,92 +1,73 @@
 "use client";
 
-import type { PageProps } from "./types";
+import Link from "next/link";
 import LogoMark from "./LogoMark";
 
-export default function Footer({ showPage, showToast }: PageProps) {
+const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+  {
+    title: "Product",
+    links: [
+      { label: "All products", href: "/products" },
+      { label: "FIDE Quote Request", href: "/products/fide-quote-request" },
+      { label: "Documentation", href: "/docs" },
+      { label: "Support", href: "/support" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "/about" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms & Conditions", href: "/terms" },
+      { label: "GDPR Compliance", href: "/gdpr" },
+      { label: "Cookie Policy", href: "/cookies" },
+    ],
+  },
+];
+
+export default function Footer() {
+  const year = new Date().getFullYear();
   return (
     <footer id="shared-footer">
       <div className="footer-grid">
         <div>
-          <div className="footer-brand">
+          <Link href="/" className="footer-brand" aria-label="FIDE Labs home">
             <LogoMark size={34} />
             <div className="logo-text" style={{ color: "#fff" }}>
               FIDE<span style={{ color: "var(--teal)" }}>Labs</span>
             </div>
-          </div>
+          </Link>
           <div className="footer-desc">
-            Building world-class Shopify applications that help merchants
-            generate more leads, automate workflows, and scale B2B operations.
+            FIDE turns your Shopify store into a proper B2B quoting tool — add a
+            Request a Quote button, hide prices from guests, and manage every
+            request from one clean dashboard.
           </div>
-          <div className="footer-social">
-            <div
-              className="social-btn"
-              onClick={() => showToast("Twitter coming soon!")}
-            >
-              𝕏
-            </div>
-            <div
-              className="social-btn"
-              onClick={() => showToast("LinkedIn coming soon!")}
-            >
-              in
-            </div>
-            <div
-              className="social-btn"
-              onClick={() => showToast("GitHub coming soon!")}
-            >
-              ⊛
-            </div>
+          <a className="footer-contact-link" href="mailto:support@fidelabs.io">
+            support@fidelabs.io
+          </a>
+        </div>
+        {COLUMNS.map((col) => (
+          <div key={col.title}>
+            <div className="footer-col-title">{col.title}</div>
+            {col.links.map((l) => (
+              <Link key={l.label} className="footer-link" href={l.href}>
+                {l.label}
+              </Link>
+            ))}
           </div>
-        </div>
-        <div>
-          <div className="footer-col-title">Products</div>
-          <a className="footer-link" onClick={() => showPage("product")}>
-            FIDE Request Quote
-          </a>
-          <a className="footer-link" onClick={() => showPage("product")}>
-            Hide Price
-          </a>
-          <a className="footer-link" onClick={() => showPage("product")}>
-            Quote Cart
-          </a>
-          <a className="footer-link" onClick={() => showPage("product")}>
-            Email Notifications
-          </a>
-        </div>
-        <div>
-          <div className="footer-col-title">Company</div>
-          <a className="footer-link" onClick={() => showPage("about")}>
-            About Us
-          </a>
-          <a className="footer-link" onClick={() => showPage("pricing")}>
-            Pricing
-          </a>
-          <a className="footer-link" onClick={() => showPage("contact")}>
-            Contact
-          </a>
-          <a className="footer-link" onClick={() => showPage("support")}>
-            Support
-          </a>
-        </div>
-        <div>
-          <div className="footer-col-title">Legal</div>
-          <a className="footer-link" onClick={() => showPage("privacy")}>
-            Privacy Policy
-          </a>
-          <a className="footer-link" onClick={() => showPage("terms")}>
-            Terms of Service
-          </a>
-          <a className="footer-link" onClick={() => showPage("docs")}>
-            Documentation
-          </a>
-        </div>
+        ))}
       </div>
       <div className="footer-bottom">
         <div className="footer-copy">
-          © 2025 FIDE Labs. All rights reserved. Built with ❤️ for Shopify
-          merchants.
+          © {year} FIDE Labs (OPC) Private Limited. All rights reserved.
         </div>
+        <div className="footer-copy">Built for Shopify merchants.</div>
       </div>
     </footer>
   );
