@@ -7,7 +7,15 @@ import ProductGallery from "../ProductGallery";
 import { FaqBlock } from "../Faq";
 import { GENERAL_FAQ } from "../../lib/faq";
 import { type Product, relatedProducts } from "../../lib/products";
+import { LEGAL_DATES } from "../../lib/company";
 import { useToast } from "../SiteProviders";
+
+const POLICIES = [
+  { key: "privacy", icon: "lock" as const, title: "Privacy Policy", desc: "What we collect and how we protect it." },
+  { key: "terms", icon: "book" as const, title: "Terms & Conditions", desc: "The rules for using the app." },
+  { key: "gdpr", icon: "shield" as const, title: "GDPR Compliance", desc: "How we meet EU data-protection rules." },
+  { key: "cookies", icon: "cookie" as const, title: "Cookie Policy", desc: "The cookies we use and why." },
+];
 
 const DOC_LINKS = [
   { icon: "rocket" as const, title: "Getting started", desc: "Install and go live in minutes." },
@@ -213,25 +221,43 @@ export default function ProductDetail({ product }: { product: Product }) {
 
       {/* APP POLICIES — dedicated per-product legal pages */}
       <section className="mx-auto max-w-[1080px] px-6 py-[64px]">
-        <div className="rounded-[22px] border border-gray-200 bg-white p-8 shadow-[0_1px_3px_rgba(16,24,40,0.04),0_14px_34px_rgba(16,24,40,0.05)] sm:p-10">
-          <div className="flex flex-col gap-6 min-[760px]:flex-row min-[760px]:items-center min-[760px]:justify-between">
-            <div className="flex items-start gap-4">
-              <div className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[13px] bg-[#f0f3ff] text-brand-blue">
-                <Icon name="shield" size={22} />
+        <div className="reveal rounded-[24px] bg-[linear-gradient(135deg,#2F54EB,#14B8A6)] p-px shadow-[0_18px_45px_rgba(47,84,235,0.12)]">
+          <div className="grid grid-cols-1 gap-9 rounded-[23px] bg-white p-8 min-[860px]:grid-cols-[0.82fr_1.18fr] min-[860px]:items-center sm:p-10">
+            {/* Intro */}
+            <div>
+              <div className="flex h-[54px] w-[54px] items-center justify-center rounded-[16px] bg-[linear-gradient(135deg,#2F54EB,#14B8A6)] text-white shadow-[0_8px_20px_rgba(47,84,235,0.26)]">
+                <Icon name="shield" size={26} />
               </div>
-              <div>
-                <h2 className="font-[family-name:var(--font-display)] text-[20px] font-bold text-gray-900">App policies</h2>
-                <p className="mt-1 text-[14px] leading-[1.6] text-gray-500">The Privacy Policy and Terms that apply specifically to {product.name}.</p>
-              </div>
+              <h2 className="mt-5 font-[family-name:var(--font-display)] text-[24px] font-extrabold leading-[1.15] tracking-[-0.8px] text-gray-900">
+                App policies
+              </h2>
+              <p className="mt-2.5 max-w-[320px] text-[14.5px] leading-[1.65] text-gray-500">
+                The legal documents that apply specifically to {product.name}. Worth a read before you install.
+              </p>
+              <span className="mt-5 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3.5 py-1.5 font-[family-name:var(--font-mono)] text-[11.5px] font-semibold text-gray-500">
+                <Icon name="check" size={13} className="text-[#0d9488]" /> Last updated · {LEGAL_DATES.updated}
+              </span>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link href={`/products/${product.slug}/privacy`} className="btn-secondary"><Icon name="lock" size={16} /> Privacy Policy</Link>
-              <Link href={`/products/${product.slug}/terms`} className="btn-secondary"><Icon name="book" size={16} /> Terms &amp; Conditions</Link>
+
+            {/* Policy links */}
+            <div className="grid grid-cols-1 gap-3 min-[560px]:grid-cols-2">
+              {POLICIES.map((p) => (
+                <Link
+                  key={p.key}
+                  href={`/products/${product.slug}/${p.key}`}
+                  className="group flex items-center gap-3.5 rounded-[15px] border border-gray-200 bg-white px-4 py-3.5 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-blue hover:shadow-[0_12px_28px_rgba(47,84,235,0.12)]"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] bg-[#f0f3ff] text-brand-blue transition-colors group-hover:bg-[linear-gradient(135deg,#2F54EB,#14B8A6)] group-hover:text-white">
+                    <Icon name={p.icon} size={18} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-[family-name:var(--font-display)] text-[14.5px] font-bold leading-tight text-gray-900">{p.title}</span>
+                    <span className="mt-0.5 block text-[12px] leading-[1.45] text-gray-500">{p.desc}</span>
+                  </span>
+                  <Icon name="arrow-right" size={16} className="shrink-0 text-gray-300 transition-all group-hover:translate-x-0.5 group-hover:text-brand-blue" />
+                </Link>
+              ))}
             </div>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 border-t border-gray-100 pt-5 text-[13px]">
-            <Link href={`/products/${product.slug}/gdpr`} className="font-medium text-gray-500 hover:text-brand-blue">GDPR Compliance</Link>
-            <Link href={`/products/${product.slug}/cookies`} className="font-medium text-gray-500 hover:text-brand-blue">Cookie Policy</Link>
           </div>
         </div>
       </section>
