@@ -124,7 +124,7 @@ export default function WorkflowTimeline() {
             {STEPS.map((s, i) => {
               const on = i < active;
               return (
-                <li key={s.n} className="relative grid grid-cols-[44px_1fr] items-start gap-9">
+                <li key={s.n} className="relative grid grid-cols-[44px_1fr] items-start gap-5 sm:gap-9">
                   {/* check node */}
                   <span
                     data-node
@@ -139,7 +139,7 @@ export default function WorkflowTimeline() {
                   </span>
 
                   {/* gradient-border white card */}
-                  <div className="rounded-[21px] bg-gradient-to-br from-brand-blue to-brand-teal p-px shadow-[0_18px_45px_rgba(47,84,235,0.12)] transition-transform duration-300 hover:-translate-y-1">
+                  <div className="min-w-0 rounded-[21px] bg-gradient-to-br from-brand-blue to-brand-teal p-px shadow-[0_18px_45px_rgba(47,84,235,0.12)] transition-transform duration-300 hover:-translate-y-1">
                     <div className="rounded-[20px] bg-white p-8 sm:p-9">
                       <div className="flex items-center justify-between gap-4">
                         <span className="bg-gradient-to-br from-brand-blue to-brand-teal bg-clip-text font-[family-name:var(--font-mono)] text-[46px] font-semibold leading-none text-transparent">{s.n}</span>
