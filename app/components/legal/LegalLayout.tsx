@@ -29,7 +29,7 @@ export default function LegalLayout({
 }: Props) {
   const [activeId, setActiveId] = useState(sections[0]?.id);
 
-  // Scrollspy — highlight the section currently in view.
+  // Scroll-spy — highlight the section currently in view.
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -38,7 +38,7 @@ export default function LegalLayout({
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (visible[0]) setActiveId(visible[0].target.id);
       },
-      { rootMargin: "-96px 0px -65% 0px", threshold: 0 }
+      { rootMargin: "-100px 0px -65% 0px", threshold: 0 }
     );
     sections.forEach((s) => {
       const el = document.getElementById(s.id);
@@ -64,9 +64,6 @@ export default function LegalLayout({
           {eyebrow ? <span className="lgl-eyebrow">{eyebrow}</span> : null}
           <h1 className="lgl-title">{title}</h1>
           <p className="lgl-intro">{intro}</p>
-          <p className="lgl-meta">
-            Effective: {effective} · Last updated: {updated}
-          </p>
         </div>
       </header>
 
@@ -74,7 +71,7 @@ export default function LegalLayout({
         <aside className="lgl-toc-wrap" aria-label="On this page">
           <nav className="lgl-toc">
             <div className="lgl-toc-title">On this page</div>
-            {sections.map((s, i) => (
+            {sections.map((s) => (
               <button
                 key={s.id}
                 type="button"
@@ -82,7 +79,6 @@ export default function LegalLayout({
                 aria-current={activeId === s.id ? "true" : undefined}
                 onClick={() => scrollTo(s.id)}
               >
-                <span className="lgl-toc-n">{i + 1}</span>
                 {s.title}
               </button>
             ))}
@@ -90,12 +86,13 @@ export default function LegalLayout({
         </aside>
 
         <article className="lgl-content">
-          {sections.map((s, i) => (
+          <div className="lgl-meta">
+            <span className="lgl-meta-chip">Last updated · {updated}</span>
+            <span className="lgl-meta-chip">Effective · {effective}</span>
+          </div>
+          {sections.map((s) => (
             <section className="lgl-section" id={s.id} key={s.id}>
-              <h2 className="lgl-h2">
-                <span className="lgl-h2-n">{i + 1}</span>
-                {s.title}
-              </h2>
+              <h2 className="lgl-h2">{s.title}</h2>
               <div className="lgl-prose">{s.body}</div>
             </section>
           ))}
