@@ -82,12 +82,6 @@ const orgJsonLd = {
   email: "support@fidelabs.io",
   description:
     "FIDE Labs builds FIDE, a Shopify app that lets B2B and wholesale merchants collect quote requests and hide prices.",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Hyderabad",
-    addressRegion: "Telangana",
-    addressCountry: "IN",
-  },
 };
 
 export default function RootLayout({
