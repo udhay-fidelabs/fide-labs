@@ -49,11 +49,5 @@ export default async function Page({
   if (!product || !entry) notFound();
 
   const { Comp } = entry;
-  return (
-    <Comp
-      eyebrow={product.name}
-      backHref={`/products/${product.slug}`}
-      backLabel={`Back to ${product.name}`}
-    />
-  );
+  return <Comp />;
 }

@@ -1,6 +1,7 @@
 /**
- * Company + legal constants. Dates and governing jurisdiction are intentionally
- * left as visible placeholders to be confirmed by legal counsel before launch.
+ * Company + legal constants. Effective/updated dates are set to the current
+ * publish date; governing jurisdiction is left as a visible placeholder to be
+ * confirmed by legal counsel before launch.
  */
 export const COMPANY = {
   legalName: "FIDE LABS (OPC) PRIVATE LIMITED",
@@ -16,7 +17,7 @@ export const COMPANY = {
 } as const;
 
 export const LEGAL_DATES = {
-  effective: "[Effective date — to be confirmed]",
-  updated: "[Last updated — to be confirmed]",
+  effective: "June 30, 2026",
+  updated: "June 30, 2026",
   jurisdiction: "[Governing jurisdiction — to be confirmed]",
 } as const;

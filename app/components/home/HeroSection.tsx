@@ -10,6 +10,8 @@ export default function HeroSection({ showPage, showToast }: PageProps) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
+  const windowRef = useRef<HTMLDivElement>(null);
 
   const go = (i: number) => setIdx(i);
   const move = (dir: number) => setIdx((i) => (i + dir + CAROUSEL_TOTAL) % CAROUSEL_TOTAL);
@@ -27,6 +29,31 @@ export default function HeroSection({ showPage, showToast }: PageProps) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // The dashboard slides are a fixed 960px desktop design. On narrower screens,
+  // scale the whole window down to fit instead of clipping it, so the full
+  // dashboard stays visible. Uses `zoom` (not `transform`) so the layout height
+  // reflows and the carousel controls sit directly beneath it.
+  useEffect(() => {
+    const outer = outerRef.current;
+    const win = windowRef.current;
+    if (!outer || !win) return;
+    const DESIGN = 960;
+    const fit = () => {
+      const w = outer.clientWidth;
+      if (w < DESIGN) {
+        win.style.width = `${DESIGN}px`;
+        win.style.setProperty("zoom", `${w / DESIGN}`);
+      } else {
+        win.style.width = "";
+        win.style.removeProperty("zoom");
+      }
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(outer);
+    return () => ro.disconnect();
   }, []);
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -63,8 +90,8 @@ export default function HeroSection({ showPage, showToast }: PageProps) {
       </div>
 
       {/* DASHBOARD CAROUSEL */}
-      <div className="carousel-outer reveal">
-        <div className="carousel-window" id="carouselWindow" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="carousel-outer reveal" ref={outerRef}>
+        <div className="carousel-window" id="carouselWindow" ref={windowRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
           <div className="carousel-track" id="carouselTrack" style={{ transform: `translateX(-${idx * 100}%)` }}>
 
             {/* ── SLIDE 1: Main Dashboard ── */}
