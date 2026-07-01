@@ -268,8 +268,7 @@ export default function ContactPage() {
             <div className="rounded-[20px] border border-gray-200 bg-[linear-gradient(135deg,#0a0f1e,#13235e)] p-7 text-white">
               <div className="text-[12px] font-bold uppercase tracking-wide text-white/55">Company</div>
               <p className="mt-2 text-[14px] leading-[1.6] text-white/80">
-                FIDE Labs (OPC) Private Limited<br />
-                Hyderabad, Telangana, India
+                FIDE Labs (OPC) Private Limited
               </p>
             </div>
           </div>

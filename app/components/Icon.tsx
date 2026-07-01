@@ -28,7 +28,8 @@ export type IconName =
   | "sliders"
   | "lifebuoy"
   | "plug"
-  | "rocket";
+  | "rocket"
+  | "cookie";
 
 const PATHS: Record<IconName, string[]> = {
   storefront: [
@@ -110,6 +111,10 @@ const PATHS: Record<IconName, string[]> = {
     "M9 13l-2 2",
     "M13 7c3-3 7-3 7-3s0 4-3 7c-1.7 1.7-4 3-6 4l-3-3c1-2 2.3-4.3 4-6z",
     "M14 8.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z",
+  ],
+  cookie: [
+    "M12 3a9 9 0 1 0 9 9 4 4 0 0 1-4-4 4 4 0 0 1-4-4 1 1 0 0 0-1-1z",
+    "M8.5 10h.01 M14 9h.01 M9 14.5h.01 M14.5 14h.01 M12 11.5h.01",
   ],
 };
 
