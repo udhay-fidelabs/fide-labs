@@ -10,9 +10,9 @@ export const ROUTES = {
   contact: "/contact",
   support: "/support",
   docs: "/docs",
-  privacy: "/privacy",
-  terms: "/terms",
-  gdpr: "/gdpr",
+  privacy: "/privacy-policy",
+  terms: "/term-condition",
+  gdpr: "/gdpr-compliance",
   cookies: "/cookies",
 } as const;
 

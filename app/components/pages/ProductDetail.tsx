@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Icon from "../Icon";
 import LogoMark from "../LogoMark";
 import ProductGallery from "../ProductGallery";
@@ -51,6 +52,30 @@ export default function ProductDetail({ product }: { product: Product }) {
               <span key={p} className="inline-flex items-center gap-1.5"><Icon name="check" size={14} /> {p}</span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* PROMO BANNER */}
+      <section className="banner-showcase">
+        <div className="banner-showcase-head">
+          <div className="section-label">At a glance</div>
+          <h2 className="section-title">
+            One app, the whole <span className="accent-teal">quote workflow</span>
+          </h2>
+          <p className="section-sub center">
+            From a hidden price to a submitted quote — here&apos;s everything{" "}
+            {product.name} brings to your Shopify storefront.
+          </p>
+        </div>
+        <div className="banner-showcase-frame">
+          <Image
+            src="/products/fide-quote-request/banner.png"
+            alt={`${product.name} — replace product prices with quote requests: hide prices, build a custom quote form, and capture B2B leads.`}
+            width={1200}
+            height={696}
+            className="banner-showcase-img"
+            sizes="(max-width: 1080px) 92vw, 1000px"
+          />
         </div>
       </section>
 

@@ -29,7 +29,12 @@ export type IconName =
   | "lifebuoy"
   | "plug"
   | "rocket"
-  | "cookie";
+  | "cookie"
+  | "menu"
+  | "x"
+  | "arrow-left"
+  | "alert"
+  | "info";
 
 const PATHS: Record<IconName, string[]> = {
   storefront: [
@@ -116,6 +121,11 @@ const PATHS: Record<IconName, string[]> = {
     "M12 3a9 9 0 1 0 9 9 4 4 0 0 1-4-4 4 4 0 0 1-4-4 1 1 0 0 0-1-1z",
     "M8.5 10h.01 M14 9h.01 M9 14.5h.01 M14.5 14h.01 M12 11.5h.01",
   ],
+  menu: ["M3 6h18", "M3 12h18", "M3 18h18"],
+  x: ["M6 6l12 12", "M18 6 6 18"],
+  "arrow-left": ["M19 12H5", "M11 18l-6-6 6-6"],
+  alert: ["M10.3 4 2.5 18a1.5 1.5 0 0 0 1.3 2.2h16.4A1.5 1.5 0 0 0 21.5 18L13.7 4a1.5 1.5 0 0 0-2.6 0z", "M12 9.5v4", "M12 17h.01"],
+  info: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M12 11v5", "M12 8h.01"],
 };
 
 export default function Icon({

@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMeta({
   title: "Privacy Policy",
   description:
     "How FIDE Labs collects, uses, stores, and protects merchant and customer data, your GDPR rights, sub-processors, and Shopify privacy webhooks.",
-  path: "/privacy",
+  path: "/privacy-policy",
 });
 
 export default function Page() {

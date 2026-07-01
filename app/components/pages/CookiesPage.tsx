@@ -12,7 +12,7 @@ const SECTIONS: LegalSection[] = [
         FIDE uses only the cookies and storage strictly necessary to operate the
         app. We do not use analytics cookies, advertising cookies, or any
         third-party tracking. This policy explains what we store and why, and
-        complements our <a href="/privacy">Privacy Policy</a>.
+        complements our <a href="/privacy-policy">Privacy Policy</a>.
       </p>
     ),
   },

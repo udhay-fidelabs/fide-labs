@@ -135,12 +135,12 @@ const SECTIONS: LegalSection[] = [
     body: (
       <p>
         Our handling of personal data is governed by our{" "}
-        <a href="/privacy">Privacy Policy</a>, which forms part of these Terms.
+        <a href="/privacy-policy">Privacy Policy</a>, which forms part of these Terms.
         For customer data collected through the App, {COMPANY.shortName} acts as a
         data processor and you are the data controller. FIDE implements
         Shopify&apos;s mandatory GDPR webhooks (<code>customers/data_request</code>,{" "}
         <code>customers/redact</code>, <code>shop/redact</code>). See our{" "}
-        <a href="/gdpr">GDPR Compliance</a> page for detail.
+        <a href="/gdpr-compliance">GDPR Compliance</a> page for detail.
       </p>
     ),
   },

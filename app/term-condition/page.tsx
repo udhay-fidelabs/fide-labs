@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMeta({
   title: "Terms & Conditions",
   description:
     "The terms governing your use of FIDE: eligibility, the service, licensing, billing, data, liability, and termination.",
-  path: "/terms",
+  path: "/term-condition",
 });
 
 export default function Page() {
