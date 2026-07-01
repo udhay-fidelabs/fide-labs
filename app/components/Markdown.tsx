@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Icon from "./Icon";
+import Icon, { type IconName } from "./Icon";
 
 /**
  * Dependency-free Markdown renderer for documentation content.
@@ -10,6 +10,20 @@ import Icon from "./Icon";
  * (1. ), blockquote callouts (> ), fenced code blocks (```), and tables (| … |).
  * Authored content lives as Markdown strings in lib/products.ts.
  */
+
+/**
+ * Stable slug for a heading's raw text, used both to set `id` on rendered
+ * headings and to build the "On this page" table of contents in DocsPage.
+ */
+export function slugify(text: string): string {
+  return text
+    .replace(/\*\*/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
 
 // ---- inline parsing: image, bold, code, links ----
 const INLINE = /(!\[[^\]]*\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
@@ -44,12 +58,29 @@ function renderInline(text: string, keyBase: string): ReactNode[] {
 const splitRow = (line: string) =>
   line.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
 
+/**
+ * Callout flavours for blockquotes. A blockquote can opt into one by starting
+ * with a marker, e.g. `> [!warning] Don't do this`. Bare blockquotes stay tips.
+ */
+type CalloutVariant = "tip" | "note" | "warning" | "important";
+const CALLOUT_ICON: Record<CalloutVariant, IconName> = {
+  tip: "bolt",
+  note: "info",
+  warning: "alert",
+  important: "shield",
+};
+function readCallout(text: string): { variant: CalloutVariant; text: string } {
+  const m = text.match(/^\[!(tip|note|warning|important)\]\s*/i);
+  if (m) return { variant: m[1].toLowerCase() as CalloutVariant, text: text.slice(m[0].length) };
+  return { variant: "tip", text };
+}
+
 type Block =
   | { type: "h"; level: number; text: string }
   | { type: "p"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
-  | { type: "quote"; text: string }
+  | { type: "quote"; variant: CalloutVariant; text: string }
   | { type: "code"; lang: string; code: string }
   | { type: "table"; header: string[]; rows: string[][] }
   | { type: "img"; alt: string; src: string };
@@ -121,7 +152,7 @@ function parse(md: string): Block[] {
         buf.push(lines[i].trim().replace(/^>\s?/, ""));
         i++;
       }
-      blocks.push({ type: "quote", text: buf.join(" ") });
+      blocks.push({ type: "quote", ...readCallout(buf.join(" ")) });
       continue;
     }
 
@@ -165,8 +196,8 @@ export default function Markdown({ source }: { source: string }) {
         switch (b.type) {
           case "h": {
             if (b.level === 1) return <h1 key={k} className="docs-title">{renderInline(b.text, k)}</h1>;
-            if (b.level === 2) return <h2 key={k} className="docs-h2">{renderInline(b.text, k)}</h2>;
-            return <h3 key={k} className="docs-h3">{renderInline(b.text, k)}</h3>;
+            if (b.level === 2) return <h2 key={k} id={slugify(b.text)} className="docs-h2">{renderInline(b.text, k)}</h2>;
+            return <h3 key={k} id={slugify(b.text)} className="docs-h3">{renderInline(b.text, k)}</h3>;
           }
           case "p":
             return <p key={k} className="docs-p">{renderInline(b.text, k)}</p>;
@@ -194,8 +225,8 @@ export default function Markdown({ source }: { source: string }) {
             );
           case "quote":
             return (
-              <div key={k} className="docs-note">
-                <Icon name="bolt" size={16} />
+              <div key={k} className={`docs-note docs-note--${b.variant}`}>
+                <Icon name={CALLOUT_ICON[b.variant]} size={16} />
                 <span>{renderInline(b.text, k)}</span>
               </div>
             );

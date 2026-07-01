@@ -44,3 +44,5 @@ next-env.d.ts
 # AI tooling (local, not shared)
 .claude/
 .agents/
+
+Figma file export
