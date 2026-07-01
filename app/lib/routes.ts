@@ -10,7 +10,7 @@ export const ROUTES = {
   contact: "/contact",
   support: "/support",
   docs: "/docs",
-  privacy: "/privacy",
+  privacy: "/privacy-policy",
   terms: "/terms",
   gdpr: "/gdpr",
   cookies: "/cookies",

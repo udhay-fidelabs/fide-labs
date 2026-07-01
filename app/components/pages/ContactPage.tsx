@@ -238,7 +238,7 @@ export default function ContactPage() {
               </p>
               <p className="mt-3 text-center text-[12px] text-gray-400">
                 By sending this message you agree to our{" "}
-                <a href="/privacy" className="underline hover:text-gray-600">Privacy Policy</a>.
+                <a href="/privacy-policy" className="underline hover:text-gray-600">Privacy Policy</a>.
               </p>
             </form>
           </div>

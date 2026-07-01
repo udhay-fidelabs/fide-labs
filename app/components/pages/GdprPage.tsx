@@ -13,7 +13,7 @@ const SECTIONS: LegalSection[] = [
         only the data the app needs, never sell it, and exclude IP addresses,
         cookies, and request headers from our error monitoring. This page explains
         how FIDE meets data-protection obligations. It complements our{" "}
-        <a href="/privacy">Privacy Policy</a>.
+        <a href="/privacy-policy">Privacy Policy</a>.
       </p>
     ),
   },
