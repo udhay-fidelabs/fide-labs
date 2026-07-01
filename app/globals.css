@@ -1136,3 +1136,16 @@ h1.hero-title,.section-title,.ps-title{color:#0a1222}
 .docs-note--warning svg{color:#d97706}
 .docs-note--important{background:#f5f3ff;border-color:#ddd6fe;color:#5b21b6}
 .docs-note--important svg{color:#7c3aed}
+
+/* ═══════════════ HOME — banner showcase ═══════════════ */
+/* Framed FIDE promo banner between ProductShowcase (dark) and WhyChooseUs
+   (white). Soft blue→teal tint so the light artwork floats as a card. */
+.banner-showcase{padding:92px 5% 104px;background:linear-gradient(165deg,var(--blue-xlight) 0%,#eef8fb 46%,#e6faf4 100%)}
+.banner-showcase-head{max-width:700px;margin:0 auto;text-align:center}
+.banner-showcase .accent-teal{background:linear-gradient(90deg,var(--blue),var(--teal-dark));-webkit-background-clip:text;background-clip:text;color:transparent}
+.banner-showcase-frame{max-width:1000px;margin:46px auto 0;border-radius:24px;overflow:hidden;border:1px solid rgba(47,84,235,.10);background:#fff;line-height:0;box-shadow:0 1px 2px rgba(16,24,40,.04),0 34px 74px rgba(16,24,40,.16)}
+.banner-showcase-img{display:block;width:100%;height:auto}
+@media(max-width:768px){
+  .banner-showcase{padding:60px 5% 68px}
+  .banner-showcase-frame{margin-top:32px;border-radius:18px}
+}

@@ -52,7 +52,7 @@ export default function ProductGallery({
         </div>
 
         {/* Slide viewport */}
-        <div className="relative aspect-[16/10] w-full bg-[linear-gradient(160deg,#eef5fc,#f6fafe)]">
+        <div className="relative aspect-[16/9] w-full bg-[linear-gradient(160deg,#eef5fc,#f6fafe)]">
           {screenshots.map((s, i) => (
             <div
               key={s.label}

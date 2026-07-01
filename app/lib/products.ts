@@ -76,14 +76,14 @@ const fideQuoteRequest: Product = {
   status: "available",
   category: "B2B & Wholesale",
   heroPoints: ["No code", "No developer", "Live in under 10 minutes"],
-  // Placeholders for now — drop real screenshots into
-  // public/products/fide-quote-request/ and set each `src` to swap them in.
+  // Real App-Store gallery slides (exported from the FIDE Figma file), optimised
+  // to public/products/fide-quote-request/. Rendered by ProductGallery.
   screenshots: [
-    { label: "Quote dashboard", icon: "grid", caption: "Every incoming request in one place — review, filter, track status, and respond with custom pricing." },
-    { label: "Request a Quote button", icon: "tag", caption: "A customizable Request a Quote button on any product or collection — no code required." },
-    { label: "Hide Price", icon: "eye-off", caption: "Hide prices and the Add to Cart button from guests to drive quote requests." },
-    { label: "Quote Cart", icon: "cart", caption: "Customers collect multiple products and submit one consolidated quote request." },
-    { label: "Email notifications", icon: "mail", caption: "Branded, automatic emails across the full quote lifecycle — sent from your own address." },
+    { label: "Overview", icon: "storefront", src: "/products/fide-quote-request/overview.webp", caption: "Add a Request a Quote button, hide prices, and turn product inquiries into qualified B2B leads." },
+    { label: "Quote dashboard", icon: "grid", src: "/products/fide-quote-request/dashboard.webp", caption: "View, organize, filter, and track every quote request from one centralized dashboard." },
+    { label: "Hide Price", icon: "eye-off", src: "/products/fide-quote-request/hide-price.webp", caption: "Hide prices on the products and pages you choose, and remove Add to Cart / Buy Now for quote-only selling." },
+    { label: "Form Builder", icon: "sliders", src: "/products/fide-quote-request/form-builder.webp", caption: "Build tailored quote forms — drag, drop, and reorder fields, and mark them required or optional." },
+    { label: "Email notifications", icon: "mail", src: "/products/fide-quote-request/email.webp", caption: "Automated, branded emails for every step of the quote lifecycle, with test sends and template variables." },
   ],
   features: [
     {
