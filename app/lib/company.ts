@@ -8,8 +8,6 @@ export const COMPANY = {
   shortName: "FIDE Labs",
   app: "FIDE",
   supportEmail: "support@fidelabs.io",
-  privacyEmail: "privacy@fidelabs.io",
-  legalEmail: "legal@fidelabs.io",
 } as const;
 
 export const LEGAL_DATES = {

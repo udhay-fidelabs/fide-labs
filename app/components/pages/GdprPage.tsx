@@ -108,7 +108,7 @@ const SECTIONS: LegalSection[] = [
     title: "Contact",
     body: (
       <ul>
-        <li><strong>Privacy email:</strong> <a href={`mailto:${COMPANY.privacyEmail}`}>{COMPANY.privacyEmail}</a></li>
+        <li><strong>Email:</strong> <a href={`mailto:${COMPANY.supportEmail}`}>{COMPANY.supportEmail}</a></li>
         <li><strong>Company:</strong> {COMPANY.legalName}</li>
       </ul>
     ),
