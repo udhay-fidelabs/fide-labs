@@ -24,8 +24,8 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Legal",
     links: [
       { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Terms & Conditions", href: "/terms" },
-      { label: "GDPR Compliance", href: "/gdpr" },
+      { label: "Terms & Conditions", href: "/term-condition" },
+      { label: "GDPR Compliance", href: "/gdpr-compliance" },
       { label: "Cookie Policy", href: "/cookies" },
     ],
   },

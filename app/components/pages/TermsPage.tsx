@@ -140,7 +140,7 @@ const SECTIONS: LegalSection[] = [
         data processor and you are the data controller. FIDE implements
         Shopify&apos;s mandatory GDPR webhooks (<code>customers/data_request</code>,{" "}
         <code>customers/redact</code>, <code>shop/redact</code>). See our{" "}
-        <a href="/gdpr">GDPR Compliance</a> page for detail.
+        <a href="/gdpr-compliance">GDPR Compliance</a> page for detail.
       </p>
     ),
   },

@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = Object.values(ROUTES).map((path) => ({
     url: path === "/" ? SITE_URL : `${SITE_URL}${path}`,
     lastModified: now,
-    changeFrequency: path.match(/privacy|terms|gdpr|cookies/) ? "yearly" : "monthly",
+    changeFrequency: path.match(/privacy|term-condition|gdpr-compliance|cookies/) ? "yearly" : "monthly",
     priority: priority[path] ?? 0.5,
   }));
 
