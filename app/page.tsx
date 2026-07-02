@@ -4,7 +4,7 @@ import { pageMeta } from "./lib/seo";
 import { SITE_URL } from "./lib/routes";
 
 export const metadata: Metadata = pageMeta({
-  title: "FIDE — Request a Quote & Hide Price for Shopify",
+  title: "FIDE Request Quote Hide Price",
   description:
     "FIDE is a Shopify app for B2B and wholesale merchants. Add a Request a Quote button, hide prices from guests, and manage every quote request from one clean dashboard. No code.",
   path: "/",
@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMeta({
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "FIDE — Request a Quote, Hide Price",
+  name: "FIDE Request Quote Hide Price",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Shopify",
   description:

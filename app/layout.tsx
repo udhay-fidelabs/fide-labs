@@ -25,7 +25,7 @@ const mono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "FIDE — Request a Quote & Hide Price for Shopify",
+    default: "FIDE Request Quote Hide Price",
     template: "%s · FIDE Labs",
   },
   description:
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "FIDE Labs",
     url: SITE_URL,
-    title: "FIDE — Request a Quote & Hide Price for Shopify",
+    title: "FIDE Request Quote Hide Price",
     description:
       "Add a Request a Quote button, hide prices from guests, and manage every quote request from one clean dashboard. Built for B2B and wholesale Shopify merchants.",
     images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "FIDE — B2B quoting for Shopify" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "FIDE — Request a Quote & Hide Price for Shopify",
+    title: "FIDE Request Quote Hide Price",
     description:
       "Add a Request a Quote button, hide prices from guests, and manage quote requests from one dashboard.",
     images: ["/opengraph-image"],

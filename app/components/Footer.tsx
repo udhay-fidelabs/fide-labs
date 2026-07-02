@@ -8,7 +8,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Product",
     links: [
       { label: "All products", href: "/products" },
-      { label: "FIDE Quote Request", href: "/products/fide-quote-request" },
+      { label: "FIDE Request Quote Hide Price", href: "/products/fide-quote-request" },
       { label: "Documentation", href: "/docs" },
       { label: "Support", href: "/support" },
     ],
