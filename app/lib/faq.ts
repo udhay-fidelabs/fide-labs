@@ -17,7 +17,7 @@ export const GENERAL_FAQ: FaqItem[] = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes! Our Starter plan is completely free with up to 50 quote requests per month. No credit card required to get started.",
+    a: "Yes, the app is free to use, and no credit card is required to get started.",
   },
   {
     q: "How long does setup take?",

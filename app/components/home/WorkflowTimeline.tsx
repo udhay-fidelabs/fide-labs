@@ -113,8 +113,9 @@ export default function WorkflowTimeline() {
         {/* timeline */}
         <div className="relative">
           <ol ref={listRef} className="relative flex flex-col gap-12 min-[900px]:gap-16">
-            {/* spine track + animated fill */}
-            <span aria-hidden="true" className="pointer-events-none absolute left-[21px] top-9 bottom-9 w-1 rounded bg-brand-blue/15">
+            {/* spine track + animated fill — a desktop-only delight; on phones
+                the cramped node gutter is dropped for full-width cards */}
+            <span aria-hidden="true" className="pointer-events-none absolute left-[21px] top-9 bottom-9 hidden w-1 rounded bg-brand-blue/15 min-[900px]:block">
               <span
                 className="absolute left-0 top-0 w-full rounded bg-gradient-to-b from-brand-blue to-brand-teal"
                 style={{ height: `${fill * 100}%` }}
@@ -124,12 +125,12 @@ export default function WorkflowTimeline() {
             {STEPS.map((s, i) => {
               const on = i < active;
               return (
-                <li key={s.n} className="relative grid grid-cols-[44px_1fr] items-start gap-5 sm:gap-9">
-                  {/* check node */}
+                <li key={s.n} className="relative grid grid-cols-1 items-start gap-5 min-[900px]:grid-cols-[44px_1fr] min-[900px]:gap-9">
+                  {/* check node — desktop timeline only */}
                   <span
                     data-node
                     aria-hidden="true"
-                    className={`z-10 mt-9 grid h-10 w-10 place-items-center rounded-full ring-4 transition-colors duration-300 ease-out ${
+                    className={`z-10 mt-9 hidden h-10 w-10 place-items-center rounded-full ring-4 transition-colors duration-300 ease-out min-[900px]:grid ${
                       on
                         ? "bg-gradient-to-br from-brand-blue to-brand-teal text-white shadow-[0_4px_12px_rgba(47,84,235,0.28)] ring-[#e9f1fd]"
                         : "bg-white text-slate-300 ring-[#dbe7f5]"
@@ -140,13 +141,15 @@ export default function WorkflowTimeline() {
 
                   {/* gradient-border white card */}
                   <div className="min-w-0 rounded-[21px] bg-gradient-to-br from-brand-blue to-brand-teal p-px shadow-[0_18px_45px_rgba(47,84,235,0.12)] transition-transform duration-300 hover:-translate-y-1">
-                    <div className="rounded-[20px] bg-white p-8 sm:p-9">
-                      <div className="flex items-center justify-between gap-4">
-                        <span className="bg-gradient-to-br from-brand-blue to-brand-teal bg-clip-text font-[family-name:var(--font-mono)] text-[46px] font-semibold leading-none text-transparent">{s.n}</span>
-                        <span className="font-[family-name:var(--font-mono)] text-[11px] font-medium uppercase tracking-[0.1em] text-gray-400">{s.meta}</span>
+                    <div className="rounded-[20px] bg-white p-6 sm:p-9">
+                      <div className="flex items-center gap-3">
+                        {/* Compact numbered chip anchors each step in the mobile stack */}
+                        <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-[11px] bg-gradient-to-br from-brand-blue to-brand-teal font-[family-name:var(--font-mono)] text-[15px] font-bold leading-none text-white shadow-[0_4px_12px_rgba(47,84,235,0.28)] min-[900px]:hidden">{s.n}</span>
+                        <span className="hidden bg-gradient-to-br from-brand-blue to-brand-teal bg-clip-text font-[family-name:var(--font-mono)] text-[46px] font-semibold leading-none text-transparent min-[900px]:inline">{s.n}</span>
+                        <span className="ml-auto font-[family-name:var(--font-mono)] text-[10.5px] font-medium uppercase tracking-[0.1em] text-gray-400 sm:text-[11px]">{s.meta}</span>
                       </div>
-                      <h3 className="mt-7 font-[family-name:var(--font-display)] text-[22px] font-bold leading-snug tracking-tight text-gray-900">{s.t}</h3>
-                      <p className="mt-3 font-[family-name:var(--font-sans)] text-[15px] leading-relaxed text-gray-500">{s.d}</p>
+                      <h3 className="mt-5 font-[family-name:var(--font-display)] text-[19px] font-bold leading-snug tracking-tight text-gray-900 sm:text-[22px] min-[900px]:mt-7">{s.t}</h3>
+                      <p className="mt-2.5 font-[family-name:var(--font-sans)] text-[14.5px] leading-relaxed text-gray-500 sm:text-[15px]">{s.d}</p>
                       <ul className="mt-5 flex flex-col gap-2.5 border-t border-gray-100 pt-5">
                         {s.points.map((p) => (
                           <li key={p} className="flex items-start gap-2.5 font-[family-name:var(--font-sans)] text-[13.5px] leading-snug text-gray-600">
@@ -165,7 +168,7 @@ export default function WorkflowTimeline() {
           </ol>
 
           {/* celebration */}
-          <div className="mt-12 grid grid-cols-[44px_1fr] items-center gap-9">
+          <div className="mt-10 flex items-center gap-4 min-[900px]:mt-12 min-[900px]:grid min-[900px]:grid-cols-[44px_1fr] min-[900px]:gap-9">
             <span
               className={`grid h-10 w-10 place-items-center text-[26px] transition-all duration-500 ${done ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
               aria-hidden="true"

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "FIDE — Request a Quote & Hide Price for Shopify";
+export const alt = "FIDE Request Quote Hide Price";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

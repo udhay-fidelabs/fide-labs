@@ -33,9 +33,9 @@ const SECTIONS: LegalSection[] = [
         <ul>
           <li>
             <strong>Merchant data</strong> — store name, Shopify store URL and
-            ID, your account name and email, subscription/billing status, and the
-            settings you choose in the app. Payment card details are handled by
-            Shopify Billing; we never see them.
+            ID, your account name and email, and the settings you choose in the
+            app. FIDE is free and does not charge you, so we never handle or see
+            any payment card details.
           </li>
           <li>
             <strong>Customer data</strong> — name, email, phone (if your form
@@ -59,7 +59,7 @@ const SECTIONS: LegalSection[] = [
     title: "How we use it",
     body: (
       <ul>
-        <li><strong>Merchant data</strong> — to run your account, deliver the app, process billing, and provide support.</li>
+        <li><strong>Merchant data</strong> — to run your account, deliver the app, and provide support.</li>
         <li><strong>Customer data</strong> — to capture, store, and display quote requests to the merchant, and to send quote-related emails on the merchant&apos;s behalf.</li>
         <li><strong>Usage data</strong> — to monitor app health, fix bugs, prevent abuse, and improve features.</li>
       </ul>

@@ -24,7 +24,7 @@ const STAGES: Stage[] = [
   { icon: "rocket", title: "Early Access Phase", desc: "FIDE is actively onboarding its first merchants. We're collecting real-world feedback to shape every feature before wider release.", badge: "Live Now", badgeTone: "bg-[#eef1ff] text-brand-blue" },
   { icon: "bolt", title: "Actively Building", desc: "Our team ships improvements weekly. The roadmap is driven by what merchants actually ask for — not assumptions.", badge: "Weekly Releases", badgeTone: "bg-[#eef1ff] text-brand-blue" },
   { icon: "chat", title: "Merchant-Led Roadmap", desc: "Every feature on our roadmap was requested by a real merchant. We build in public and listen first.", badge: "Open Feedback", badgeTone: "bg-[#fef3c7] text-[#92660a]" },
-  { icon: "tag", title: "100% Free to Start", desc: "No pricing tiers, no locked features, no credit card. Install FIDE free and use everything while we grow together.", badge: "Free Now", badgeTone: "bg-[#e0faf8] text-[#0d9488]" },
+  { icon: "tag", title: "100% Free to Start", desc: "No hidden fees, no locked features, no credit card. Install FIDE free and use everything while we grow together.", badge: "Free Now", badgeTone: "bg-[#e0faf8] text-[#0d9488]" },
 ];
 
 const MISSION_POINTS = [

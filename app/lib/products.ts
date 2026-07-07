@@ -68,7 +68,7 @@ export type Product = {
 
 const fideQuoteRequest: Product = {
   slug: "fide-quote-request",
-  name: "FIDE Quote Request",
+  name: "FIDE Request Quote Hide Price",
   shortName: "Quote Request",
   tagline: "Request a Quote & Hide Price for Shopify",
   summary:
