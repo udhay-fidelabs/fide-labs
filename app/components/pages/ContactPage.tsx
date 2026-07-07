@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Icon from "../Icon";
 import { useToast } from "../SiteProviders";
+import { PRODUCTS } from "../../lib/products";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
@@ -10,12 +11,14 @@ const SUPPORT_EMAIL = "support@fidelabs.io";
 
 const SUBJECTS = [
   "General inquiry",
-  "Request a quote / pricing",
   "Technical support",
-  "Partnership",
-  "Billing",
   "Feature request",
 ];
+
+const FEATURE_REQUEST = "Feature request";
+// Apps a feature request can target — driven by the product catalog so new
+// products appear here automatically.
+const APP_OPTIONS = PRODUCTS.map((p) => p.name);
 
 type Errors = Partial<Record<"firstName" | "email" | "message", string>>;
 type Status = "idle" | "submitting" | "success" | "error";
@@ -27,6 +30,8 @@ export default function ContactPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
   const [errorMsg, setErrorMsg] = useState("");
+  const [subject, setSubject] = useState(SUBJECTS[0]);
+  const isFeatureRequest = subject === FEATURE_REQUEST;
 
   function validate(form: HTMLFormElement): Errors {
     const data = new FormData(form);
@@ -59,11 +64,12 @@ export default function ContactPage() {
     // No access key configured yet → graceful mailto fallback.
     if (!ACCESS_KEY) {
       const data = new FormData(form);
+      const appLine = data.get("app") ? `App: ${data.get("app")}\n` : "";
       const body = encodeURIComponent(
-        `Name: ${data.get("firstName")} ${data.get("lastName")}\nCompany: ${data.get("company")}\n\n${data.get("message")}`
+        `Name: ${data.get("firstName")} ${data.get("lastName")}\nCompany: ${data.get("company")}\n${appLine}\n${data.get("message")}`
       );
-      const subject = encodeURIComponent(`[Website] ${data.get("subject")}`);
-      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
+      const mailSubject = encodeURIComponent(`[Website] ${data.get("subject")}`);
+      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${mailSubject}&body=${body}`;
       showToast("Opening your email app…");
       return;
     }
@@ -84,6 +90,7 @@ export default function ContactPage() {
       if (res.ok && json.success) {
         setStatus("success");
         form.reset();
+        setSubject(SUBJECTS[0]);
         showToast("Message sent — we'll reply within one business day.");
       } else {
         throw new Error(json.message || "Submission failed");
@@ -209,11 +216,25 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <label htmlFor="subject" className="mb-1.5 block text-[13px] font-semibold text-gray-700">Subject</label>
-                  <select id="subject" name="subject" defaultValue={SUBJECTS[0]} className={`${inputBase} border-gray-200`}>
+                  <select id="subject" name="subject" value={subject} onChange={(e) => setSubject(e.target.value)} className={`${inputBase} border-gray-200`}>
                     {SUBJECTS.map((s) => <option key={s}>{s}</option>)}
                   </select>
                 </div>
               </div>
+
+              {isFeatureRequest && (
+                <div className="mt-4">
+                  <label htmlFor="app" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
+                    Which app is this for? <span className="text-red-500">*</span>
+                  </label>
+                  <select id="app" name="app" defaultValue={APP_OPTIONS[0]} className={`${inputBase} border-gray-200`}>
+                    {APP_OPTIONS.map((a) => <option key={a}>{a}</option>)}
+                  </select>
+                  <p className="mt-1.5 text-[12.5px] text-gray-400">
+                    Tell us which app the feature is for so we route it to the right team.
+                  </p>
+                </div>
+              )}
 
               <div className="mt-4">
                 <label htmlFor="message" className="mb-1.5 block text-[13px] font-semibold text-gray-700">

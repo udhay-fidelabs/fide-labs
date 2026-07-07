@@ -35,7 +35,7 @@ const SECTIONS: LegalSection[] = [
         <li>FIDE runs exclusively on Shopify; you must have a valid, active store and comply with Shopify&apos;s Terms of Service.</li>
         <li>You are responsible for all activity under your account, including staff, and for maintaining the confidentiality of your Shopify credentials.</li>
         <li>All information you provide must be accurate and kept current.</li>
-        <li>FIDE is licensed per store; each store requires its own subscription.</li>
+        <li>FIDE is licensed per store and is currently provided free of charge.</li>
         <li>The App is for commercial business use. You must be at least 18 (or the age of majority in your jurisdiction).</li>
       </ul>
     ),
@@ -71,7 +71,7 @@ const SECTIONS: LegalSection[] = [
     title: "Licence",
     body: (
       <p>
-        Subject to these Terms and payment of applicable fees, we grant you a
+        Subject to these Terms, we grant you a
         limited, non-exclusive, non-transferable, non-sublicensable, revocable
         licence to use FIDE to operate quote request functionality on your
         Shopify store(s). You must not copy, modify, reverse engineer, resell, or
@@ -117,15 +117,13 @@ const SECTIONS: LegalSection[] = [
     ),
   },
   {
-    id: "billing",
-    title: "Billing and payment",
+    id: "fees",
+    title: "Fees",
     body: (
       <ul>
-        <li>All billing is processed through Shopify&apos;s billing system; we never store your payment card details.</li>
-        <li>Fees are charged per store. We may change pricing with reasonable advance notice.</li>
-        <li>Where a free trial is offered, you are not charged until it expires.</li>
-        <li>Fees are exclusive of applicable taxes, which are added and billed through Shopify.</li>
-        <li>Subscription fees are charged in advance and are generally non-refundable, except where required by law or at our discretion. You may cancel any time by uninstalling.</li>
+        <li>FIDE is currently provided free of charge. There is no subscription, no recurring fee, and no payment card required to install or use the app.</li>
+        <li>FIDE does not process your payments. Any charges you incur directly with Shopify for your store are governed by Shopify, not by us.</li>
+        <li>You may uninstall the app at any time.</li>
       </ul>
     ),
   },
@@ -176,8 +174,7 @@ const SECTIONS: LegalSection[] = [
       <p>
         To the fullest extent permitted by law, {COMPANY.shortName}&apos;s total
         liability for any claim relating to these Terms or the App shall not
-        exceed the greater of the fees you paid in the three months before the
-        event, or USD $100. We are not liable for indirect, incidental, special,
+        exceed USD $100. We are not liable for indirect, incidental, special,
         consequential, or punitive damages. Nothing limits liability that cannot
         be excluded by law.
       </p>

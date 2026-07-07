@@ -183,7 +183,7 @@ export default function ProductDetail({ product }: { product: Product }) {
       <section id="free" className="px-[5%] py-[80px]" style={{ background: "linear-gradient(180deg,#eef3ff,#fafcfe)" }}>
         <div className="reveal mx-auto grid max-w-[1080px] grid-cols-1 items-center gap-12 min-[900px]:grid-cols-[1.05fr_1fr]">
           <div>
-            <div className="section-label">Pricing</div>
+            <div className="section-label">The Cost</div>
             <h2 className="font-[family-name:var(--font-display)] text-[clamp(28px,3.6vw,44px)] font-extrabold leading-[1.1] tracking-[-1.4px] text-gray-900">
               100% Free.<br />Every Feature Included.
             </h2>
@@ -200,10 +200,9 @@ export default function ProductDetail({ product }: { product: Product }) {
             </div>
           </div>
           <div className="relative rounded-[22px] border-2 border-brand-blue bg-white p-8 shadow-[0_24px_60px_rgba(47,84,235,0.14)]">
-            <span className="absolute -top-3 right-7 rounded-full bg-brand-teal px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Current Plan</span>
+            <span className="absolute -top-3 right-7 rounded-full bg-brand-teal px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">No Charge</span>
             <div className="flex items-end gap-1">
               <span className="font-[family-name:var(--font-display)] text-[52px] font-extrabold leading-none text-gray-900">$0</span>
-              <span className="mb-2 text-[16px] font-medium text-gray-400">/mo</span>
             </div>
             <div className="mt-1 text-[15px] font-bold text-brand-teal">Free Now</div>
             <ul className="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-6">
