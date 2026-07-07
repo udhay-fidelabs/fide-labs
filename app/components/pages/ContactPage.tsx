@@ -3,44 +3,43 @@
 import { useState } from "react";
 import Icon from "../Icon";
 import { useToast } from "../SiteProviders";
-import { PRODUCTS } from "../../lib/products";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
 const SUPPORT_EMAIL = "support@fidelabs.io";
 
-const SUBJECTS = [
-  "General inquiry",
-  "Technical support",
-  "Feature request",
-];
-
-const FEATURE_REQUEST = "Feature request";
-// Apps a feature request can target — driven by the product catalog so new
-// products appear here automatically.
-const APP_OPTIONS = PRODUCTS.map((p) => p.name);
-
-type Errors = Partial<Record<"firstName" | "email" | "message", string>>;
+type Errors = Partial<
+  Record<"firstName" | "lastName" | "email" | "shopUrl" | "message", string>
+>;
 type Status = "idle" | "submitting" | "success" | "error";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Accepts a store URL with an optional scheme/www and path, e.g.
+// "your-store.myshopify.com", "https://shop.co.uk", "www.mystore.com/path".
+// Requires a real domain (a dot + a 2+ char TLD) so bare words are rejected.
+const SHOP_URL_RE =
+  /^(https?:\/\/)?(www\.)?([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(\/[^\s]*)?$/i;
 
 export default function ContactPage() {
   const { showToast } = useToast();
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
   const [errorMsg, setErrorMsg] = useState("");
-  const [subject, setSubject] = useState(SUBJECTS[0]);
-  const isFeatureRequest = subject === FEATURE_REQUEST;
 
   function validate(form: HTMLFormElement): Errors {
     const data = new FormData(form);
     const next: Errors = {};
     if (!String(data.get("firstName") ?? "").trim())
       next.firstName = "Please enter your first name.";
+    if (!String(data.get("lastName") ?? "").trim())
+      next.lastName = "Please enter your last name.";
     const email = String(data.get("email") ?? "").trim();
     if (!email) next.email = "Please enter your email address.";
     else if (!EMAIL_RE.test(email)) next.email = "Please enter a valid email address.";
+    const shopUrl = String(data.get("shopUrl") ?? "").trim();
+    if (!shopUrl) next.shopUrl = "Please enter your shop URL.";
+    else if (!SHOP_URL_RE.test(shopUrl))
+      next.shopUrl = "Please enter a valid store URL (e.g. your-store.myshopify.com).";
     const msg = String(data.get("message") ?? "").trim();
     if (msg.length < 10) next.message = "Please add a few more details (at least 10 characters).";
     return next;
@@ -64,11 +63,10 @@ export default function ContactPage() {
     // No access key configured yet → graceful mailto fallback.
     if (!ACCESS_KEY) {
       const data = new FormData(form);
-      const appLine = data.get("app") ? `App: ${data.get("app")}\n` : "";
       const body = encodeURIComponent(
-        `Name: ${data.get("firstName")} ${data.get("lastName")}\nCompany: ${data.get("company")}\n${appLine}\n${data.get("message")}`
+        `Name: ${data.get("firstName")} ${data.get("lastName")}\nShop URL: ${data.get("shopUrl")}\n\n${data.get("message")}`
       );
-      const mailSubject = encodeURIComponent(`[Website] ${data.get("subject")}`);
+      const mailSubject = encodeURIComponent("[Website] Contact form");
       window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${mailSubject}&body=${body}`;
       showToast("Opening your email app…");
       return;
@@ -80,7 +78,7 @@ export default function ContactPage() {
       const data = new FormData(form);
       data.append("access_key", ACCESS_KEY);
       data.append("from_name", "FIDE Labs website");
-      data.append("subject", `[Website] ${data.get("subject")}`);
+      data.append("subject", "[Website] Contact form");
       const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
@@ -90,7 +88,6 @@ export default function ContactPage() {
       if (res.ok && json.success) {
         setStatus("success");
         form.reset();
-        setSubject(SUBJECTS[0]);
         showToast("Message sent — we'll reply within one business day.");
       } else {
         throw new Error(json.message || "Submission failed");
@@ -138,130 +135,119 @@ export default function ContactPage() {
 
   return (
     <div className="page active" id="page-contact">
-      <section className="hero" style={{ paddingBottom: "32px" }}>
-        <div className="badge"><span className="badge-dot" /> Get in touch</div>
-        <h1 className="hero-title">
-          We&apos;re here<br />to <span className="accent">help</span>
-        </h1>
-        <p className="hero-sub">
-          Questions, feedback, or partnership ideas? Tell us a little about what
-          you need and we&apos;ll reply within one business day.
-        </p>
-      </section>
-
-      <section className="mx-auto max-w-[1080px] px-6 pb-[96px]">
+      <section className="mx-auto max-w-[1080px] px-6 py-[72px] sm:py-[104px]">
         <div className="grid grid-cols-1 gap-8 min-[860px]:grid-cols-[1.4fr_1fr]">
           {/* FORM */}
-          <div className="rounded-[20px] border border-gray-200 bg-white p-7 shadow-[0_10px_40px_rgba(16,24,40,0.05)] sm:p-9">
-            <h2 className="font-[family-name:var(--font-display)] text-[22px] font-bold text-gray-900">Send us a message</h2>
-            <p className="mb-7 mt-1 text-[14px] text-gray-500">
-              We typically respond within one business day.
-            </p>
+          <div className="rounded-[22px] border border-gray-200 bg-white p-7 shadow-[0_10px_40px_rgba(16,24,40,0.05)] sm:p-10">
+          {/* Eyebrow */}
+          <div className="flex items-center gap-2.5 text-[15px] font-semibold text-gray-900">
+            <span className="h-2.5 w-2.5 rounded-full bg-brand-teal" />
+            Contact
+          </div>
+          <h1 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(28px,4.4vw,42px)] font-extrabold leading-[1.08] tracking-[-1.2px] text-gray-900">
+            How can we <span className="text-brand-blue">help?</span>
+          </h1>
+          <p className="mb-8 mt-3 text-[14.5px] leading-[1.7] text-gray-500">
+            Tell us a little about what you need and we&apos;ll reply within one
+            business day.
+          </p>
 
-            {status === "error" && errorMsg && (
-              <div role="alert" className="mb-5 rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] text-red-700">
-                {errorMsg}
+          {status === "error" && errorMsg && (
+            <div role="alert" className="mb-5 rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] text-red-700">
+              {errorMsg}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate aria-describedby="form-status">
+            {/* Honeypot (visually hidden, aria-hidden) */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] h-0 w-0 opacity-0"
+            />
+
+            <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
+              <div>
+                <label htmlFor="firstName" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
+                  First Name <span className="text-red-500">*</span>
+                </label>
+                <input id="firstName" name="firstName" type="text" autoComplete="given-name"
+                  className={cls("firstName")} placeholder="First Name"
+                  aria-invalid={!!errors.firstName}
+                  aria-describedby={errors.firstName ? "err-firstName" : undefined} />
+                {errors.firstName && (
+                  <p id="err-firstName" className="mt-1 text-[12.5px] text-red-600">{errors.firstName}</p>
+                )}
               </div>
-            )}
-
-            <form onSubmit={handleSubmit} noValidate aria-describedby="form-status">
-              {/* Honeypot (visually hidden, aria-hidden) */}
-              <input
-                type="checkbox"
-                name="botcheck"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                className="absolute left-[-9999px] h-0 w-0 opacity-0"
-              />
-
-              <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
-                <div>
-                  <label htmlFor="firstName" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
-                    First name <span className="text-red-500">*</span>
-                  </label>
-                  <input id="firstName" name="firstName" type="text" autoComplete="given-name"
-                    className={cls("firstName")} placeholder="John"
-                    aria-invalid={!!errors.firstName}
-                    aria-describedby={errors.firstName ? "err-firstName" : undefined} />
-                  {errors.firstName && (
-                    <p id="err-firstName" className="mt-1 text-[12.5px] text-red-600">{errors.firstName}</p>
-                  )}
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="mb-1.5 block text-[13px] font-semibold text-gray-700">Last name</label>
-                  <input id="lastName" name="lastName" type="text" autoComplete="family-name"
-                    className={`${inputBase} border-gray-200`} placeholder="Smith" />
-                </div>
+              <div>
+                <label htmlFor="lastName" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
+                <input id="lastName" name="lastName" type="text" autoComplete="family-name"
+                  className={cls("lastName")} placeholder="Last Name"
+                  aria-invalid={!!errors.lastName}
+                  aria-describedby={errors.lastName ? "err-lastName" : undefined} />
+                {errors.lastName && (
+                  <p id="err-lastName" className="mt-1 text-[12.5px] text-red-600">{errors.lastName}</p>
+                )}
               </div>
+            </div>
 
-              <div className="mt-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
+              <div>
                 <label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
-                  Email address <span className="text-red-500">*</span>
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <input id="email" name="email" type="email" autoComplete="email"
-                  className={cls("email")} placeholder="john@company.com"
+                  className={cls("email")} placeholder="Email"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "err-email" : undefined} />
                 {errors.email && (
                   <p id="err-email" className="mt-1 text-[12.5px] text-red-600">{errors.email}</p>
                 )}
               </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
-                <div>
-                  <label htmlFor="company" className="mb-1.5 block text-[13px] font-semibold text-gray-700">Company</label>
-                  <input id="company" name="company" type="text" autoComplete="organization"
-                    className={`${inputBase} border-gray-200`} placeholder="Acme Wholesale" />
-                </div>
-                <div>
-                  <label htmlFor="subject" className="mb-1.5 block text-[13px] font-semibold text-gray-700">Subject</label>
-                  <select id="subject" name="subject" value={subject} onChange={(e) => setSubject(e.target.value)} className={`${inputBase} border-gray-200`}>
-                    {SUBJECTS.map((s) => <option key={s}>{s}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              {isFeatureRequest && (
-                <div className="mt-4">
-                  <label htmlFor="app" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
-                    Which app is this for? <span className="text-red-500">*</span>
-                  </label>
-                  <select id="app" name="app" defaultValue={APP_OPTIONS[0]} className={`${inputBase} border-gray-200`}>
-                    {APP_OPTIONS.map((a) => <option key={a}>{a}</option>)}
-                  </select>
-                  <p className="mt-1.5 text-[12.5px] text-gray-400">
-                    Tell us which app the feature is for so we route it to the right team.
-                  </p>
-                </div>
-              )}
-
-              <div className="mt-4">
-                <label htmlFor="message" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
-                  Message <span className="text-red-500">*</span>
+              <div>
+                <label htmlFor="shopUrl" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
+                  Shop url <span className="text-red-500">*</span>
                 </label>
-                <textarea id="message" name="message" rows={5}
-                  className={`${cls("message")} resize-y`} placeholder="Tell us how we can help…"
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? "err-message" : undefined} />
-                {errors.message && (
-                  <p id="err-message" className="mt-1 text-[12.5px] text-red-600">{errors.message}</p>
+                <input id="shopUrl" name="shopUrl" type="text" autoComplete="url"
+                  className={cls("shopUrl")} placeholder="your-store.myshopify.com"
+                  aria-invalid={!!errors.shopUrl}
+                  aria-describedby={errors.shopUrl ? "err-shopUrl" : undefined} />
+                {errors.shopUrl && (
+                  <p id="err-shopUrl" className="mt-1 text-[12.5px] text-red-600">{errors.shopUrl}</p>
                 )}
               </div>
+            </div>
 
-              <button type="submit" disabled={status === "submitting"}
-                className="btn-primary mt-6 w-full justify-center disabled:cursor-not-allowed disabled:opacity-60">
-                {status === "submitting" ? "Sending…" : "Send message"}
-                {status !== "submitting" && <Icon name="arrow-right" size={18} />}
-              </button>
-              <p id="form-status" className="sr-only" aria-live="polite">
-                {status === "submitting" ? "Sending your message" : ""}
-              </p>
-              <p className="mt-3 text-center text-[12px] text-gray-400">
-                By sending this message you agree to our{" "}
-                <a href="/privacy-policy" className="underline hover:text-gray-600">Privacy Policy</a>.
-              </p>
-            </form>
+            <div className="mt-4">
+              <label htmlFor="message" className="mb-1.5 block text-[13px] font-semibold text-gray-700">
+                Message <span className="text-red-500">*</span>
+              </label>
+              <textarea id="message" name="message" rows={5}
+                className={`${cls("message")} resize-y`} placeholder="Message"
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "err-message" : undefined} />
+              {errors.message && (
+                <p id="err-message" className="mt-1 text-[12.5px] text-red-600">{errors.message}</p>
+              )}
+            </div>
+
+            <button type="submit" disabled={status === "submitting"}
+              className="btn-primary mt-6 w-full justify-center disabled:cursor-not-allowed disabled:opacity-60">
+              {status === "submitting" ? "Sending…" : "Submit"}
+            </button>
+            <p id="form-status" className="sr-only" aria-live="polite">
+              {status === "submitting" ? "Sending your message" : ""}
+            </p>
+            <p className="mt-3 text-center text-[12px] text-gray-400">
+              By sending this message you agree to our{" "}
+              <a href="/privacy-policy" className="underline hover:text-gray-600">Privacy Policy</a>.
+            </p>
+          </form>
           </div>
 
           {/* INFO */}
@@ -282,7 +268,7 @@ export default function ContactPage() {
               </div>
               <div className="text-[12px] font-bold uppercase tracking-wide text-gray-400">Documentation</div>
               <a href="/docs" className="mt-1 block text-[16px] font-semibold text-gray-900 hover:text-brand-blue">
-                Setup guides & FAQ
+                Setup guides &amp; FAQ
               </a>
               <p className="mt-1 text-[13px] text-gray-500">Install, configure, and go live in minutes.</p>
             </div>
