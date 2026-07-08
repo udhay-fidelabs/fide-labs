@@ -4,8 +4,6 @@ import { useState } from "react";
 import Icon from "../Icon";
 import { useToast } from "../SiteProviders";
 
-const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
 const SUPPORT_EMAIL = "support@fidelabs.io";
 
 type Errors = Partial<
@@ -60,31 +58,22 @@ export default function ContactPage() {
       return;
     }
 
-    // No access key configured yet → graceful mailto fallback.
-    if (!ACCESS_KEY) {
-      const data = new FormData(form);
-      const body = encodeURIComponent(
-        `Name: ${data.get("firstName")} ${data.get("lastName")}\nShop URL: ${data.get("shopUrl")}\n\n${data.get("message")}`
-      );
-      const mailSubject = encodeURIComponent("[Website] Contact form");
-      window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${mailSubject}&body=${body}`;
-      showToast("Opening your email app…");
-      return;
-    }
-
     setStatus("submitting");
     setErrorMsg("");
     try {
       const data = new FormData(form);
-      data.append("access_key", ACCESS_KEY);
-      data.append("from_name", "FIDE Labs website");
-      data.append("subject", "[Website] Contact form");
-      const res = await fetch(WEB3FORMS_ENDPOINT, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: data,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: data.get("firstName"),
+          lastName: data.get("lastName"),
+          email: data.get("email"),
+          shopUrl: data.get("shopUrl"),
+          message: data.get("message"),
+        }),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (res.ok && json.success) {
         setStatus("success");
         form.reset();
