@@ -1,0 +1,85 @@
+<!--
+  FIDE — contact form notification email.
+
+  This file is NOT imported by the app. It is the source you paste into Resend
+  when you create the template (Resend dashboard → Templates → Create → HTML).
+
+  Steps:
+    1. Create a template in Resend and paste this HTML.
+    2. Set the template Subject to:  New contact message from {{fullName}}
+    3. Save/publish, copy the template ID, and put it in .env.local as
+       CONTACT_TEMPLATE_ID. The route (app/api/contact/route.ts) fills these
+       variables on every send:
+         firstName, lastName, fullName, email, shopUrl, message
+
+  Variables use Resend's {{variable}} syntax and are inserted as escaped text.
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f4f8;margin:0;padding:24px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(16,24,40,0.08)">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#2F54EB 0%,#14B8A6 100%);padding:28px 32px">
+            <div style="color:rgba(255,255,255,0.85);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">FIDE Labs</div>
+            <div style="color:#ffffff;font-size:22px;font-weight:800;margin-top:6px;letter-spacing:-0.4px">New contact form message</div>
+          </td>
+        </tr>
+
+        <!-- Intro -->
+        <tr>
+          <td style="padding:28px 32px 8px">
+            <p style="margin:0;font-size:15px;line-height:1.6;color:#334155">
+              <strong style="color:#0f172a">{{fullName}}</strong> just reached out through the website contact form.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Details -->
+        <tr>
+          <td style="padding:12px 32px 4px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e6e9ef;border-radius:12px;border-collapse:separate;overflow:hidden">
+              <tr>
+                <td style="padding:14px 16px;font-size:13px;color:#64748b;width:120px;border-bottom:1px solid #eef1f5">Name</td>
+                <td style="padding:14px 16px;font-size:14px;color:#0f172a;font-weight:600;border-bottom:1px solid #eef1f5">{{fullName}}</td>
+              </tr>
+              <tr>
+                <td style="padding:14px 16px;font-size:13px;color:#64748b;border-bottom:1px solid #eef1f5">Email</td>
+                <td style="padding:14px 16px;font-size:14px;border-bottom:1px solid #eef1f5"><a href="mailto:{{email}}" style="color:#2F54EB;text-decoration:none;font-weight:600">{{email}}</a></td>
+              </tr>
+              <tr>
+                <td style="padding:14px 16px;font-size:13px;color:#64748b">Shop URL</td>
+                <td style="padding:14px 16px;font-size:14px;color:#0f172a;font-weight:600">{{shopUrl}}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Message -->
+        <tr>
+          <td style="padding:20px 32px 4px">
+            <div style="font-size:13px;color:#64748b;margin-bottom:8px">Message</div>
+            <div style="white-space:pre-wrap;font-size:14px;line-height:1.7;color:#0f172a;background:#f6f7f9;border-radius:12px;padding:16px 18px">{{message}}</div>
+          </td>
+        </tr>
+
+        <!-- Reply hint -->
+        <tr>
+          <td style="padding:20px 32px 28px">
+            <a href="mailto:{{email}}" style="display:inline-block;background:#2F54EB;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;padding:12px 22px;border-radius:10px">Reply to {{firstName}}</a>
+            <p style="margin:14px 0 0;font-size:12px;color:#94a3b8">You can also just hit Reply — this email's reply-to is set to {{email}}.</p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:18px 32px;background:#0a0f1e">
+            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.55)">Sent by the FIDE Labs website contact form.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>

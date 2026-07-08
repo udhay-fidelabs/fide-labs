@@ -2,30 +2,27 @@ import type { NextRequest } from "next/server";
 import { Resend } from "resend";
 
 // Contact form → email delivery via Resend.
-// The API key is read server-side only and never exposed to the browser.
+// The email design lives in a Resend template (not in this file); we only pass
+// the field values as variables. See email-templates/contact-notification.html
+// for the template source to paste into Resend.
+//
 // Set these in .env.local (see .env.example):
 //   RESEND_API_KEY      — required, from https://resend.com/api-keys
-//   CONTACT_TO_EMAIL     — inbox that receives submissions (default support@fidelabs.io)
-//   CONTACT_FROM_EMAIL   — verified sender (default Resend's shared test sender)
+//   CONTACT_TEMPLATE_ID — required, the Resend template ID to render
+//   CONTACT_TO_EMAIL    — inbox that receives submissions
+//   CONTACT_FROM_EMAIL  — verified sender ("Name <you@your-domain>")
 
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL as string;
-const FROM_EMAIL =
-  process.env.CONTACT_FROM_EMAIL as string;
+const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL as string;
+const TEMPLATE_ID = process.env.CONTACT_TEMPLATE_ID as string;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SHOP_URL_RE =
   /^(https?:\/\/)?(www\.)?([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(\/[^\s]*)?$/i;
 
-function esc(s: string) {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
-
 export async function POST(request: NextRequest) {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || !TEMPLATE_ID) {
     return Response.json(
       { success: false, message: "Email service is not configured." },
       { status: 503 }
@@ -68,35 +65,17 @@ export async function POST(request: NextRequest) {
   }
 
   const fullName = `${firstName} ${lastName}`;
-  const text = [
-    `Name: ${fullName}`,
-    `Email: ${email}`,
-    `Shop URL: ${shopUrl}`,
-    "",
-    "Message:",
-    message,
-  ].join("\n");
-  const html = `
-    <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;color:#111">
-      <h2 style="margin:0 0 16px">New contact form message</h2>
-      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse">
-        <tr><td style="padding:4px 16px 4px 0;color:#666">Name</td><td style="padding:4px 0"><strong>${esc(fullName)}</strong></td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#666">Email</td><td style="padding:4px 0"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#666">Shop URL</td><td style="padding:4px 0">${esc(shopUrl)}</td></tr>
-      </table>
-      <p style="margin:16px 0 6px;color:#666">Message</p>
-      <div style="white-space:pre-wrap;padding:12px 14px;background:#f6f7f9;border-radius:10px">${esc(message)}</div>
-    </div>`;
 
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
+      template: {
+        id: TEMPLATE_ID,
+        variables: { firstName, lastName, fullName, email, shopUrl, message },
+      },
       from: FROM_EMAIL,
       to: [TO_EMAIL],
       replyTo: email,
-      subject: `New contact message from ${fullName}`,
-      text,
-      html,
     });
     if (error) {
       console.error("Resend send error:", error);
