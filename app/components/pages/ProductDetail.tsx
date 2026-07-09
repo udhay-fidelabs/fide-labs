@@ -42,13 +42,14 @@ export default function ProductDetail({ product }: { product: Product }) {
           </h1>
           <p className="mx-auto mt-4 max-w-[640px] text-[17px] leading-[1.6] text-white/70">{product.summary}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
+            <Link
+              href={"https://apps.shopify.com/fide-request-quote-hide-price"}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary"
-              onClick={() => showToast("FIDE is launching on the Shopify App Store soon.")}
             >
               <Icon name="tag" size={18} /> Try for free
-            </button>
+            </Link>
             <Link className="btn-secondary" href="/docs" style={{ color: "#fff", borderColor: "rgba(255,255,255,.2)" }}>
               <Icon name="book" size={18} /> View documentation
             </Link>

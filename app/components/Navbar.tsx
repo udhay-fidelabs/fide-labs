@@ -150,7 +150,7 @@ export default function Navbar() {
 
         {/* Right actions */}
         <div className="nv-right">
-          <Link href="/contact" className="nv-cta">Try Now</Link>
+          <Link href="/products" className="nv-cta">Try Now</Link>
           <button
             type="button"
             className="nv-burger"
